@@ -1,24 +1,23 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
 import VuexPersistence from 'vuex-persist';
-// import module from './module';
-
-// For persisted store key
-// const { searchParams } = new URL(window.location.href);
-// const token = searchParams.get('t') || 'NO-TOKEN';
+import { cookieUniversalNuxt } from 'cookie-universal-nuxt';
+import pricingData from './pricingData';
 
 Vue.use(Vuex);
+console.log('i get hit in the store plugin?');
+
 const vuexLocal = new VuexPersistence({
-  // key: `vuex-${token}`,
-  storage: window.sessionStorage,
-  modules: ['module'] // only save 'moduleName' module
+  storage: process.client ? cookieUniversalNuxt : null, // Use cookie-universal-nuxt on the client-side
+  paths: ['modules']
 });
 
-export default new Vuex.Store({
-  modules: {
-    module
-  },
-  plugins: [vuexLocal.plugin],
-  strict: true
-});
+const store = () =>
+  new Vuex.Store({
+    modules: {
+      pricingData
+    },
+    plugins: [vuexLocal.plugin]
+  });
+
+export default store;

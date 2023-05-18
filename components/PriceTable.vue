@@ -1,7 +1,13 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-text-field v-model="search" clearable label="Search"></v-text-field>
+      <v-checkbox v-model="clearFieldOnClick"></v-checkbox>
+      <v-text-field
+        v-model="search"
+        clearable
+        label="Search"
+        @click="clearFieldOnClick ? (search = '') : null"
+      ></v-text-field>
       <v-select
         v-model="filter"
         :items="filterOptions"
@@ -57,13 +63,15 @@ export default {
   name: 'PriceTable',
   data() {
     return {
+      clearFieldOnClick: false,
       items: [],
-      search: '',
       filter: '',
+      filterOptions: ['All', 'Venator'],
       paginationOptions: {
         itemsPerPage: 10, // Number of items per page
         page: 1 // Initial page
       },
+      search: '',
       tableHeaders: [
         { text: 'ID', value: 'id', visible: true },
         { text: 'Name', value: 'name', visible: true },
@@ -79,8 +87,7 @@ export default {
         { text: 'Daily Volume', value: 'dailyVolume', visible: true },
         { text: 'Potential Profit', value: 'potentialProfit', visible: true },
         { text: 'Actions', value: 'actions', visible: true }
-      ],
-      filterOptions: ['All', 'Venator']
+      ]
     };
   },
 
@@ -90,7 +97,7 @@ export default {
         return this.items.filter(
           item =>
             item.name.toLowerCase().includes('venator bow') ||
-            item.name.toLowerCase().includes('venator shards')
+            item.name.toLowerCase().includes('venator shard')
         );
       }
       return this.items.filter(item =>
@@ -102,39 +109,8 @@ export default {
     showDetails(item) {
       // Handle showing details for the selected item
       console.log('Showing details for:', item);
-    },
-    async fetchData() {
-      // mapping can be cached because this stores the iteems only. then I can reference it form tat object
-      try {
-        const [mappingResponse, latestResponse] = await Promise.all([
-          this.$axios.get('https://prices.runescape.wiki/api/v1/osrs/mapping'),
-          // I should cache this and on,y allow it to be called once every 2 minuteS?
-          this.$axios.get('https://prices.runescape.wiki/api/v1/osrs/latest')
-        ]);
-
-        const mappingData = mappingResponse.data;
-        const latestData = latestResponse.data.data;
-
-        // Merge the data based on a common identifier, for example, 'id'
-        this.items = mappingData.map(item => {
-          const matchingLatestItem = latestData[item.id];
-
-          if (matchingLatestItem) {
-            return {
-              ...item,
-              ...matchingLatestItem
-            };
-          }
-
-          return item;
-        });
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
     }
   },
-  mounted() {
-    this.fetchData();
-  }
+  mounted() {}
 };
 </script>
