@@ -1,44 +1,66 @@
-import { $axios } from '@nuxtjs/axios';
+import axios from 'axios';
 
-export default {
-  state: {
-    items: []
+const state = {
+  pricesById: {},
+  allItems: []
+};
+
+const getters = {
+  allItems: state =>
+    state.allItems.map(item => {
+      const priceById = state.pricesById[item.id] || {}; // Check for undefined
+      const profit = priceById.high ? priceById.high * 0.01 - priceById.low : 0; // Check if priceById.high exists
+      return {
+        ...item,
+        ...priceById,
+        profit
+      };
+    })
+};
+
+const mutations = {
+  SET_PRICES_BY_ID: (state, items) => {
+    state.pricesById = items;
   },
-  getters: {
-    getItems: state => state.items
-  },
-  mutations: {
-    SET_ITEMS(state, items) {
-      state.items = items;
+  SET_ITEMS: (state, items) => {
+    state.allItems = items;
+  }
+};
+
+const actions = {
+  getPricingData: async ({ commit }) => {
+    try {
+      // axios.get('https://prices.runescape.wiki/api/v1/osrs/mapping'),
+      const { data } = await axios.get(
+        'https://prices.runescape.wiki/api/v1/osrs/latest'
+      );
+
+      commit('SET_PRICES_BY_ID', data.data);
+    } catch (error) {
+      console.error('Error fetching Pricing data:', error);
+      // Handle the error case
     }
   },
-  actions: {
-    async getPricingData({ commit }) {
-      console.log('hitting the pricing data for data');
-      try {
-        const [mappingResponse, latestResponse] = await Promise.all([
-          $axios.get('https://prices.runescape.wiki/api/v1/osrs/mapping'),
-          $axios.get('https://prices.runescape.wiki/api/v1/osrs/latest')
-        ]);
+  getMappingData: async ({ commit }) => {
+    try {
+      const { data } = await axios.get(
+        'https://prices.runescape.wiki/api/v1/osrs/mapping'
+      );
 
-        const mappingData = mappingResponse.data;
-        const latestData = latestResponse.data;
+      console.log('---data', data);
 
-        if (Array.isArray(latestData.testData)) {
-          const items = mappingData.map(item => {
-            const matchingItem = latestData.testData.find(
-              latestItem => latestItem.id === item.id
-            );
-            return {
-              ...item,
-              ...(matchingItem || {})
-            };
-          });
-          commit('SET_ITEMS', items);
-        } else console.error('testData is not an array:', latestData.testData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      commit('SET_ITEMS', data);
+    } catch (error) {
+      console.error('Error fetching Pricing data:', error);
+      // Handle the error case
     }
   }
+};
+
+export default {
+  namespaced: true,
+  getters,
+  state,
+  actions,
+  mutations
 };

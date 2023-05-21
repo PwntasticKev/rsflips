@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/no-unresolved
 import { mapActions } from 'vuex';
 // eslint-disable-next-line
 import PriceTable from '../components/PriceTable';
@@ -16,10 +15,11 @@ export default {
     PriceTable
   },
   methods: {
-    ...mapActions('pricingData', ['getPricingData'])
+    ...mapActions('pricingData', ['getPricingData', 'getMappingData'])
   },
   created() {
     this.getPricingData();
+    this.getMappingData();
   }
 };
 </script>

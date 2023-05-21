@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors';
+
 const path = require('path');
 
 export default {
@@ -31,6 +32,11 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify'
   ],
+
+  eslint: {
+    // ESLint options
+    fix: true // Automatically fix ESLint errors on save
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -74,9 +80,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [({ isLegacy }) => isLegacy && 'axios'],
+    transpile: [({ isLegacy }) => isLegacy && 'axios']
   },
-    alias: {
-      '@/components': path.resolve(__dirname, '../components')
-    }
+  alias: {
+    '@/components': path.resolve(__dirname, '../components')
+  }
 };

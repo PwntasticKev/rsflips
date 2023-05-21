@@ -47,24 +47,19 @@
             </v-card>
           </v-menu>
         </template>
-
-        <template v-slot:[`item.actions`]="{ item }">
-          <v-btn icon @click="showDetails(item)">
-            <v-icon>mdi-information-outline</v-icon>
-          </v-btn>
-        </template>
       </v-data-table>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'PriceTable',
   data() {
     return {
       clearFieldOnClick: false,
-      items: [],
       filter: '',
       filterOptions: ['All', 'Venator'],
       paginationOptions: {
@@ -76,41 +71,30 @@ export default {
         { text: 'ID', value: 'id', visible: true },
         { text: 'Name', value: 'name', visible: true },
         { text: 'Buy Limit', value: 'limit', visible: true },
-        { text: 'Buy Price', value: 'buyPrice', visible: true },
-        { text: 'Sell Price', value: 'sellPrice', visible: true },
-        {
-          text: 'Most Recent Purchase',
-          value: 'mostRecentPurchase',
-          visible: true
-        },
-        { text: 'Margin', value: 'margin', visible: true },
+        { text: 'Buy Price', value: 'lowTime', visible: true },
+        { text: 'Sell Price', value: 'highTime', visible: true },
+        { text: 'Profit', value: 'profit', visible: true },
         { text: 'Daily Volume', value: 'dailyVolume', visible: true },
-        { text: 'Potential Profit', value: 'potentialProfit', visible: true },
-        { text: 'Actions', value: 'actions', visible: true }
+        { text: 'Potential Profit', value: 'potentialProfit', visible: true }
       ]
     };
   },
 
   computed: {
+    ...mapGetters('pricingData', ['allItems']),
     filteredItems() {
       if (this.filter === 'Venator') {
-        return this.items.filter(
+        return this.allItems.filter(
           item =>
             item.name.toLowerCase().includes('venator bow') ||
             item.name.toLowerCase().includes('venator shard')
         );
       }
-      return this.items.filter(item =>
+      return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
       );
     }
   },
-  methods: {
-    showDetails(item) {
-      // Handle showing details for the selected item
-      console.log('Showing details for:', item);
-    }
-  },
-  mounted() {}
+  methods: {}
 };
 </script>

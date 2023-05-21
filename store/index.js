@@ -5,7 +5,6 @@ import { cookieUniversalNuxt } from 'cookie-universal-nuxt';
 import pricingData from './pricingData';
 
 Vue.use(Vuex);
-console.log('i get hit in the store plugin?');
 
 const vuexLocal = new VuexPersistence({
   storage: process.client ? cookieUniversalNuxt : null, // Use cookie-universal-nuxt on the client-side
