@@ -9,7 +9,9 @@ const getters = {
   allItems: state =>
     state.allItems.map(item => {
       const priceById = state.pricesById[item.id] || {}; // Check for undefined
-      const profit = priceById.high ? priceById.high * 0.01 - priceById.low : 0; // Check if priceById.high exists
+      const profit = priceById.high
+        ? Math.floor(priceById.high * 0.99 - priceById.low)
+        : 0; // Check if priceById.high exists
       return {
         ...item,
         ...priceById,

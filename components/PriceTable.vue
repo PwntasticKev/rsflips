@@ -87,6 +87,7 @@ export default {
       },
       search: '',
       tableHeaders: [
+        { text: 'ID', value: 'id', visible: true },
         { text: 'Img', value: 'img', visible: true },
         { text: 'Name', value: 'name', visible: true },
         { text: 'Buy Limit', value: 'limit', visible: true },
@@ -101,12 +102,36 @@ export default {
     ...mapGetters('pricingData', ['allItems']),
     filteredItems() {
       if (this.filter === 'Venator') {
-        return this.allItems.filter(
-          item =>
-            item.name.toLowerCase().includes('venator bow') ||
-            item.name.toLowerCase().includes('venator shard')
-        );
+        return this.allItems
+          .filter(
+            item =>
+              item.name.toLowerCase().includes('venator bow') ||
+              item.name.toLowerCase().includes('venator shard')
+          )
+          .flatMap(item => {
+            if (item.name.toLowerCase().includes('venator bow')) {
+              const venatorShard = this.allItems.find(i =>
+                i.name.toLowerCase().includes('venator shard')
+              );
+              const totalPrice = venatorShard.low * 5; // Total cost of buying 5 Venator shards
+              const adjustedHighPrice = item.high * 0.99; // Subtract 1% from the high price
+              const profit = (adjustedHighPrice - totalPrice).toLocaleString(); // Profit when selling at adjusted high price
+
+              // Create a separate object with modified profit
+              const modifiedItem = {
+                ...item,
+                id: `${item.id}-SET`,
+                name: 'SET PRICE',
+                profit // Modify the profit in the existing "set" object
+              };
+
+              // Return both the original item and the modified item
+              return [item, modifiedItem];
+            }
+            return item;
+          });
       }
+
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
       );
