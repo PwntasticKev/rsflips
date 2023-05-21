@@ -13,7 +13,11 @@ const getters = {
       return {
         ...item,
         ...priceById,
-        profit
+        profit,
+        img: `https://oldschool.runescape.wiki/images/c/c1/${item.name.replace(
+          /\s+/g,
+          '_'
+        )}.png?${item.id}b`
       };
     })
 };
@@ -46,8 +50,6 @@ const actions = {
       const { data } = await axios.get(
         'https://prices.runescape.wiki/api/v1/osrs/mapping'
       );
-
-      console.log('---data', data);
 
       commit('SET_ITEMS', data);
     } catch (error) {

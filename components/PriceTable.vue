@@ -26,6 +26,25 @@
         :options="paginationOptions"
         :search="search"
       >
+        <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
+        <template slot="item.img" slot-scope="{ item }">
+          <td>
+            <v-img :alt="item.name" contain :src="item.img" width="75%" />
+          </td>
+        </template>
+        <template slot="item.high" slot-scope="{ item }">
+          <td>{{ item.high.toLocaleString() }}</td>
+        </template>
+        <template slot="item.low" slot-scope="{ item }">
+          <td>{{ item.low.toLocaleString() }}</td>
+        </template>
+        <template slot="item.profit" slot-scope="{ item }">
+          <td>
+            <span :style="getProfitClass(item)">
+              {{ item.profit.toLocaleString() }}
+            </span>
+          </td>
+        </template>
         <template #top>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -68,14 +87,12 @@ export default {
       },
       search: '',
       tableHeaders: [
-        { text: 'ID', value: 'id', visible: true },
+        { text: 'Img', value: 'img', visible: true },
         { text: 'Name', value: 'name', visible: true },
         { text: 'Buy Limit', value: 'limit', visible: true },
-        { text: 'Buy Price', value: 'lowTime', visible: true },
-        { text: 'Sell Price', value: 'highTime', visible: true },
-        { text: 'Profit', value: 'profit', visible: true },
-        { text: 'Daily Volume', value: 'dailyVolume', visible: true },
-        { text: 'Potential Profit', value: 'potentialProfit', visible: true }
+        { text: 'Buy Price', value: 'low', visible: true },
+        { text: 'Sell Price', value: 'high', visible: true },
+        { text: 'Profit', value: 'profit', visible: true }
       ]
     };
   },
@@ -95,6 +112,18 @@ export default {
       );
     }
   },
-  methods: {}
+  methods: {
+    getProfitClass(item) {
+      const textColor =
+        item.profit < 0
+          ? this.$vuetify.theme.themes.dark.warning
+          : this.$vuetify.theme.themes.dark.primary; // Custom text colors
+
+      return {
+        'font-weight': item.profit > 0 ? 'bold' : 'normal',
+        color: textColor
+      };
+    }
+  }
 };
 </script>
