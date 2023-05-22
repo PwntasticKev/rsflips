@@ -16,6 +16,11 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
+  target: 'static',
+  generate: {
+    dir: 'dist'
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
@@ -77,10 +82,6 @@ export default {
         }
       }
     }
-  },
-  target: 'static',
-  generate: {
-    dir: 'dist' // Set the output directory to 'dist'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
