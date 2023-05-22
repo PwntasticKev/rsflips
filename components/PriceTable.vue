@@ -53,10 +53,7 @@
 
             <v-card>
               <v-list dense>
-                <v-list-item
-                  v-for="(column, index) in tableHeaders"
-                  :key="index"
-                >
+                <v-list-item v-for="column in tableHeaders" :key="column.text">
                   <v-checkbox
                     v-model="column.visible"
                     :label="column.text"
@@ -80,15 +77,15 @@ export default {
     return {
       clearFieldOnClick: false,
       filter: '',
-      filterOptions: ['All', 'Venator', 'Justicar'],
+      filterOptions: ['All', 'Venator', 'Justicar', 'Voidwaker'],
       paginationOptions: {
-        itemsPerPage: 50, // Number of items per page
+        itemsPerPage: 30, // Number of items per page
         page: 1 // Initial page
       },
       search: '',
       tableHeaders: [
         { text: 'ID', value: 'id', visible: true },
-        { text: 'Img', value: 'img', visible: true },
+        { text: 'Img', value: 'img', visible: false },
         { text: 'Name', value: 'name', visible: true },
         { text: 'Buy Limit', value: 'limit', visible: true },
         { text: 'Buy Price', value: 'low', visible: true },
@@ -102,12 +99,14 @@ export default {
     ...mapGetters('pricingData', [
       'allItems',
       'venatorFilter',
-      'justicarFilter'
+      'justicarFilter',
+      'voidwakerFilter'
     ]),
     filteredItems() {
       if (this.filter === 'Venator') return this.venatorFilter;
 
       if (this.filter === 'Justicar') return this.justicarFilter;
+      if (this.filter === 'Voidwaker') return this.voidwakerFilter;
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
@@ -122,7 +121,7 @@ export default {
           : this.$vuetify.theme.themes.dark.primary; // Custom text colors
 
       return {
-        'font-weight': item.profit > 0 ? 'bold' : 'normal',
+        'font-weight': 'bold',
         color: textColor
       };
     }

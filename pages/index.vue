@@ -20,6 +20,12 @@ export default {
   created() {
     this.getPricingData();
     this.getMappingData();
+    this.interval = setInterval(() => {
+      this.getPricingData();
+    }, 180000);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   }
 };
 </script>

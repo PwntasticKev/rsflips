@@ -94,6 +94,48 @@ const getters = {
           return [item, modifiedItem];
         }
         return [item];
+      }),
+  voidwakerFilter: (state, getters) =>
+    getters.allItems
+      .filter(
+        item =>
+          item.name.toLowerCase().includes('Voidwaker blade') ||
+          item.name.toLowerCase().includes('Voidwaker hilt') ||
+          item.name.toLowerCase().includes('Voidwaker gem') ||
+          item.name.toLowerCase().includes('Voidwaker')
+      )
+      .flatMap(item => {
+        if (item.name.toLowerCase().includes('Voidwaker')) {
+          const blade = getters.allItems.find(i =>
+            i.name.toLowerCase().includes('Voidwaker blade')
+          );
+          const hilt = getters.allItems.find(i =>
+            i.name.toLowerCase().includes('Voidwaker hilt')
+          );
+          const gem = getters.allItems.find(i =>
+            i.name.toLowerCase().includes('Voidwaker gem')
+          );
+
+          const bladeLow = blade.low;
+          const hiltLow = hilt.low;
+          const gemLow = gem.low;
+
+          const adjustedHighPrice = item.high * 0.99;
+          const profit = Math.floor(
+            adjustedHighPrice - (bladeLow + hiltLow + gemLow)
+          ).toLocaleString();
+
+          const modifiedItem = {
+            ...item,
+            id: `${item.id}-SET`,
+            img: 'https://oldschool.runescape.wiki/images/5/5e/Voidwaker.png?7263b',
+            name: 'SET PRICE',
+            profit
+          };
+
+          return [item, modifiedItem];
+        }
+        return [item];
       })
 };
 
@@ -117,10 +159,11 @@ const actions = {
       commit('SET_PRICES_BY_ID', data.data);
     } catch (error) {
       console.error('Error fetching Pricing data:', error);
-      // Handle the error case
     }
   },
-  getMappingData: async ({ commit }) => {
+  async getMappingData({ state, commit }) {
+    if (state.mapItems.length > 0) return;
+
     try {
       const { data } = await axios.get(
         'https://prices.runescape.wiki/api/v1/osrs/mapping'
@@ -129,7 +172,6 @@ const actions = {
       commit('SET_ITEMS', data);
     } catch (error) {
       console.error('Error fetching Pricing data:', error);
-      // Handle the error case
     }
   }
 };
