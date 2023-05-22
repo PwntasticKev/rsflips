@@ -78,11 +78,14 @@ export default {
       }
     }
   },
+  target: 'static',
+  generate: {
+    dir: 'dist' // Set the output directory to 'dist'
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [({ isLegacy }) => isLegacy && 'axios'],
-    publicPath: '/dist/'
+    transpile: [({ isLegacy }) => isLegacy && 'axios']
   },
   alias: {
     '@/components': path.resolve(__dirname, '../components')
