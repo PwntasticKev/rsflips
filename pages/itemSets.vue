@@ -1,14 +1,7 @@
 <template>
-  <div>
-    Item Sets
-  </div>
+  <div>Item Sets</div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-
-</style>
+<style scoped></style>

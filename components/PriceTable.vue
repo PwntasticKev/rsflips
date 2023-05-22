@@ -80,9 +80,9 @@ export default {
     return {
       clearFieldOnClick: false,
       filter: '',
-      filterOptions: ['All', 'Venator'],
+      filterOptions: ['All', 'Venator', 'Justicar'],
       paginationOptions: {
-        itemsPerPage: 10, // Number of items per page
+        itemsPerPage: 50, // Number of items per page
         page: 1 // Initial page
       },
       search: '',
@@ -99,38 +99,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters('pricingData', ['allItems']),
+    ...mapGetters('pricingData', [
+      'allItems',
+      'venatorFilter',
+      'justicarFilter'
+    ]),
     filteredItems() {
-      if (this.filter === 'Venator') {
-        return this.allItems
-          .filter(
-            item =>
-              item.name.toLowerCase().includes('venator bow') ||
-              item.name.toLowerCase().includes('venator shard')
-          )
-          .flatMap(item => {
-            if (item.name.toLowerCase().includes('venator bow')) {
-              const venatorShard = this.allItems.find(i =>
-                i.name.toLowerCase().includes('venator shard')
-              );
-              const totalPrice = venatorShard.low * 5; // Total cost of buying 5 Venator shards
-              const adjustedHighPrice = item.high * 0.99; // Subtract 1% from the high price
-              const profit = (adjustedHighPrice - totalPrice).toLocaleString(); // Profit when selling at adjusted high price
+      if (this.filter === 'Venator') return this.venatorFilter;
 
-              // Create a separate object with modified profit
-              const modifiedItem = {
-                ...item,
-                id: `${item.id}-SET`,
-                name: 'SET PRICE',
-                profit // Modify the profit in the existing "set" object
-              };
-
-              // Return both the original item and the modified item
-              return [item, modifiedItem];
-            }
-            return item;
-          });
-      }
+      if (this.filter === 'Justicar') return this.justicarFilter;
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())

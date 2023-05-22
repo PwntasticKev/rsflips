@@ -2,16 +2,16 @@ import axios from 'axios';
 
 const state = {
   pricesById: {},
-  allItems: []
+  mapItems: []
 };
 
 const getters = {
   allItems: state =>
-    state.allItems.map(item => {
-      const priceById = state.pricesById[item.id] || {}; // Check for undefined
+    state.mapItems.map(item => {
+      const priceById = state.pricesById[item.id] || {};
       const profit = priceById.high
         ? Math.floor(priceById.high * 0.99 - priceById.low)
-        : 0; // Check if priceById.high exists
+        : 0;
       return {
         ...item,
         ...priceById,
@@ -21,7 +21,80 @@ const getters = {
           '_'
         )}.png?${item.id}b`
       };
-    })
+    }),
+  venatorFilter: (state, getters) => {
+    console.log(getters, 'allitems');
+    return getters.allItems
+      .filter(
+        item =>
+          item.name.toLowerCase().includes('venator bow') ||
+          item.name.toLowerCase().includes('venator shard')
+      )
+      .flatMap(item => {
+        if (item.name.toLowerCase().includes('venator bow')) {
+          const venatorShard = getters.allItems.find(i =>
+            i.name.toLowerCase().includes('venator shard')
+          );
+          const totalPrice = venatorShard.low * 5;
+          const adjustedHighPrice = item.high * 0.99;
+          const profit = Math.floor(
+            adjustedHighPrice - totalPrice
+          ).toLocaleString();
+
+          const modifiedItem = {
+            ...item,
+            id: `${item.id}-SET`,
+            name: 'SET PRICE',
+            profit
+          };
+
+          return [item, modifiedItem];
+        }
+        return [item];
+      });
+  },
+  justicarFilter: (state, getters) =>
+    getters.allItems
+      .filter(
+        item =>
+          item.name.toLowerCase().includes('justiciar legguards') ||
+          item.name.toLowerCase().includes('justiciar faceguard') ||
+          item.name.toLowerCase().includes('justiciar chestguard') ||
+          item.name.toLowerCase().includes('justiciar armour set')
+      )
+      .flatMap(item => {
+        if (item.name.toLowerCase().includes('justiciar armour set')) {
+          const faceguard = getters.allItems.find(i =>
+            i.name.toLowerCase().includes('justiciar faceguard')
+          );
+          const chestguard = getters.allItems.find(i =>
+            i.name.toLowerCase().includes('justiciar chestguard')
+          );
+          const legguards = getters.allItems.find(i =>
+            i.name.toLowerCase().includes('justiciar legguards')
+          );
+
+          const faceguardLow = faceguard.low;
+          const chestguardLow = chestguard.low;
+          const legguardsLow = legguards.low;
+
+          const adjustedHighPrice = item.high * 0.99;
+          const profit = Math.floor(
+            adjustedHighPrice - (faceguardLow + chestguardLow + legguardsLow)
+          ).toLocaleString();
+
+          const modifiedItem = {
+            ...item,
+            id: `${item.id}-SET`,
+            img: 'https://oldschool.runescape.wiki/images/3/37/Justiciar_armour_set.png?7263b',
+            name: 'SET PRICE',
+            profit
+          };
+
+          return [item, modifiedItem];
+        }
+        return [item];
+      })
 };
 
 const mutations = {
@@ -29,7 +102,7 @@ const mutations = {
     state.pricesById = items;
   },
   SET_ITEMS: (state, items) => {
-    state.allItems = items;
+    state.mapItems = items;
   }
 };
 

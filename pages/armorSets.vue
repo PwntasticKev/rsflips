@@ -1,12 +1,7 @@
-
 <template>
-<div>Armor Sets</div>
+  <div>Armor Sets</div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,12 +1,7 @@
-
 <template>
-<div>Clean Herbs</div>
+  <div>Clean Herbs</div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>
