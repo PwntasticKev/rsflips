@@ -81,7 +81,8 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [({ isLegacy }) => isLegacy && 'axios']
+    transpile: [({ isLegacy }) => isLegacy && 'axios'],
+    publicPath: '/dist/'
   },
   alias: {
     '@/components': path.resolve(__dirname, '../components')

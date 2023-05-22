@@ -33,15 +33,15 @@
           </td>
         </template>
         <template slot="item.high" slot-scope="{ item }">
-          <td>{{ item.high.toLocaleString() }}</td>
+          <td>{{ item.high }}</td>
         </template>
         <template slot="item.low" slot-scope="{ item }">
-          <td>{{ item.low.toLocaleString() }}</td>
+          <td>{{ item.low }}</td>
         </template>
         <template slot="item.profit" slot-scope="{ item }">
           <td>
             <span :style="getProfitClass(item)">
-              {{ item.profit.toLocaleString() }}
+              {{ item.profit }}
             </span>
           </td>
         </template>

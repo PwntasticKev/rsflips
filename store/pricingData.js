@@ -122,7 +122,7 @@ const getters = {
 
           const adjustedHighPrice = item.high * 0.99;
           const profit = Math.floor(
-            adjustedHighPrice - (bladeLow + hiltLow + gemLow)
+            adjustedHighPrice - (bladeLow + hiltLow + gemLow + 500000)
           ).toLocaleString();
 
           const modifiedItem = {
