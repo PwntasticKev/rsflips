@@ -16,6 +16,25 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
+  builds: [
+    {
+      src: 'nuxt.config.js',
+      use: '@nuxtjs/vercel-builder',
+      config: {}
+    }
+  ],
+
+  routes: [
+    {
+      src: '/sw.js',
+      continue: true,
+      headers: {
+        'Cache-Control': 'public, max-age=0, must-revalidate',
+        'Service-Worker-Allowed': '/'
+      }
+    }
+  ],
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
