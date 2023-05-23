@@ -23,36 +23,36 @@ const getters = {
       };
     }),
   venatorFilter: (state, getters) => {
-    console.log(getters, 'allitems');
-    return getters.allItems
-      .filter(
-        item =>
-          item.name.toLowerCase().includes('venator bow') ||
-          item.name.toLowerCase().includes('venator shard')
-      )
-      .flatMap(item => {
-        if (item.name.toLowerCase().includes('venator bow')) {
-          const venatorShard = getters.allItems.find(i =>
-            i.name.toLowerCase().includes('venator shard')
-          );
-          const totalPrice = venatorShard.low * 5;
-          const adjustedHighPrice = item.high * 0.99;
-          const profit = Math.floor(
-            adjustedHighPrice - totalPrice
-          ).toLocaleString();
+    const venatorBowItems = getters.allItems.filter(
+      item =>
+        item.name.toLowerCase().includes('venator bow') ||
+        item.name.toLowerCase().includes('venator shard')
+    );
 
-          const modifiedItem = {
-            ...item,
-            id: `${item.id}-SET`,
-            name: 'SET PRICE',
-            profit
-          };
+    return venatorBowItems.flatMap(item => {
+      if (item.name.toLowerCase().includes('venator bow')) {
+        const venatorShard = getters.allItems.find(i =>
+          i.name.toLowerCase().includes('venator shard')
+        );
+        const totalPrice = venatorShard ? venatorShard.low * 5 : 0;
+        const adjustedHighPrice = item.high * 0.99;
+        const profit = Math.floor(
+          adjustedHighPrice - totalPrice
+        ).toLocaleString();
 
-          return [item, modifiedItem];
-        }
-        return [item];
-      });
+        const modifiedItem = {
+          ...item,
+          id: `${item.id}-SET`,
+          name: 'SET PRICE',
+          profit
+        };
+
+        return [item, modifiedItem];
+      }
+      return [item];
+    });
   },
+
   justicarFilter: (state, getters) =>
     getters.allItems
       .filter(
@@ -95,48 +95,77 @@ const getters = {
         }
         return [item];
       }),
-  voidwakerFilter: (state, getters) =>
-    getters.allItems
-      .filter(
-        item =>
-          item.name.toLowerCase().includes('Voidwaker blade') ||
-          item.name.toLowerCase().includes('Voidwaker hilt') ||
-          item.name.toLowerCase().includes('Voidwaker gem') ||
-          item.name.toLowerCase().includes('Voidwaker')
-      )
-      .flatMap(item => {
-        if (item.name.toLowerCase().includes('Voidwaker')) {
-          const blade = getters.allItems.find(i =>
-            i.name.toLowerCase().includes('Voidwaker blade')
-          );
-          const hilt = getters.allItems.find(i =>
-            i.name.toLowerCase().includes('Voidwaker hilt')
-          );
-          const gem = getters.allItems.find(i =>
-            i.name.toLowerCase().includes('Voidwaker gem')
-          );
+  voidwakerFilter: (state, getters) => {
+    const voidwakerItems = getters.allItems.filter(
+      item =>
+        item.name.toLowerCase().includes('voidwaker') ||
+        item.name.toLowerCase().includes('voidwaker blade') ||
+        item.name.toLowerCase().includes('voidwaker hilt') ||
+        item.name.toLowerCase().includes('voidwaker gem')
+    );
 
-          const bladeLow = blade.low;
-          const hiltLow = hilt.low;
-          const gemLow = gem.low;
+    const blade = getters.allItems.find(i =>
+      i.name.toLowerCase().includes('voidwaker blade')
+    );
+    const hilt = getters.allItems.find(i =>
+      i.name.toLowerCase().includes('voidwaker hilt')
+    );
+    const gem = getters.allItems.find(i =>
+      i.name.toLowerCase().includes('voidwaker gem')
+    );
+    const voidwaker = getters.allItems.find(i =>
+      i.name.toLowerCase().includes('voidwaker')
+    );
 
-          const adjustedHighPrice = item.high * 0.99;
-          const profit = Math.floor(
-            adjustedHighPrice - (bladeLow + hiltLow + gemLow + 500000)
-          ).toLocaleString();
+    const bladeLow = blade ? blade.low : 0;
+    const hiltLow = hilt ? hilt.low : 0;
+    const gemLow = gem ? gem.low : 0;
 
-          const modifiedItem = {
-            ...item,
-            id: `${item.id}-SET`,
-            img: 'https://oldschool.runescape.wiki/images/5/5e/Voidwaker.png?7263b',
-            name: 'SET PRICE',
-            profit
-          };
+    const totalPrice = bladeLow + hiltLow + gemLow + 500000;
 
-          return [item, modifiedItem];
-        }
-        return [item];
-      })
+    const modifiedItem = {
+      ...voidwaker,
+      id: 'voidwaker-set',
+      img: 'https://oldschool.runescape.wiki/images/5/5e/Voidwaker.png?7263b',
+      name: 'Voidwaker (set)',
+      profit: (voidwakerItems[0].high * 0.99 - totalPrice).toLocaleString()
+    };
+
+    return [...voidwakerItems, modifiedItem];
+  },
+  dragonHunterLance: (state, getters) => {
+    const lanceItems = getters.allItems.filter(
+      item =>
+        item.name.toLowerCase().includes('Dragon hunter lance') ||
+        item.name.toLowerCase().includes(`hydra's claw`) ||
+        item.name.toLowerCase().includes('zamorakian hasta')
+    );
+
+    const claw = getters.allItems.find(i =>
+      i.name.toLowerCase().includes(`hydra's claw`)
+    );
+    const hasta = getters.allItems.find(i =>
+      i.name.toLowerCase().includes('zamorakian hasta')
+    );
+    const lance = getters.allItems.find(i =>
+      i.name.toLowerCase().includes('Dragon hunter lance')
+    );
+
+    const clawLow = claw ? claw.low : 0;
+    const hastaLow = hasta ? hasta.low : 0;
+
+    const totalPrice = clawLow + hastaLow;
+
+    const modifiedItem = {
+      ...lance,
+      id: 'lance-set',
+      img: 'https://oldschool.runescape.wiki/images/c/c1/Dragon_hunter_lance.png?22978b',
+      name: 'Dragon Hunter Lance (set)',
+      profit: (lanceItems[0].high * 0.99 - totalPrice).toLocaleString()
+    };
+
+    return [...lanceItems, modifiedItem];
+  }
 };
 
 const mutations = {

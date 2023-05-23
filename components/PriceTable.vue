@@ -77,7 +77,7 @@ export default {
     return {
       clearFieldOnClick: false,
       filter: '',
-      filterOptions: ['All', 'Venator', 'Justicar', 'Voidwaker'],
+      filterOptions: ['All', 'Venator', 'Justicar', 'Voidwaker', 'Lance'],
       paginationOptions: {
         itemsPerPage: 30, // Number of items per page
         page: 1 // Initial page
@@ -100,13 +100,15 @@ export default {
       'allItems',
       'venatorFilter',
       'justicarFilter',
-      'voidwakerFilter'
+      'voidwakerFilter',
+      'dragonHunterLance'
     ]),
     filteredItems() {
       if (this.filter === 'Venator') return this.venatorFilter;
 
       if (this.filter === 'Justicar') return this.justicarFilter;
       if (this.filter === 'Voidwaker') return this.voidwakerFilter;
+      if (this.filter === 'Lance') return this.dragonHunterLance;
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
