@@ -13,6 +13,7 @@
         :items="filterOptions"
         label="Filter"
         outlined
+        @click="search = ''"
       ></v-select>
     </v-card-title>
 
@@ -28,8 +29,13 @@
       >
         <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
         <template slot="item.img" slot-scope="{ item }">
-          <td>
-            <v-img :alt="item.name" contain :src="item.img" width="65%" />
+          <td class="py-2">
+            <v-img
+              :alt="`Flipping item- ${item.id}`"
+              aspect-ratio="1"
+              contain
+              :src="item.img"
+            />
           </td>
         </template>
         <template slot="item.high" slot-scope="{ item }">
@@ -77,7 +83,18 @@ export default {
     return {
       clearFieldOnClick: false,
       filter: '',
-      filterOptions: ['All', 'Venator', 'Justicar', 'Voidwaker', 'Lance'],
+      filterOptions: [
+        'All',
+        'Venator',
+        'Justicar',
+        'Voidwaker',
+        'Lance',
+        'Inquisitor',
+        'Kodai Wand',
+        'Ancestral',
+        'Odium Ward',
+        'Malediction Ward'
+      ],
       paginationOptions: {
         itemsPerPage: 30, // Number of items per page
         page: 1 // Initial page
@@ -103,10 +120,33 @@ export default {
 
       if (this.filter === 'Justicar')
         return this.getItemSetProfit(22438, [22327, 22326, 22328]);
+
       if (this.filter === 'Voidwaker')
-        return this.getItemSetProfit(27690, [27681, 27684, 27687], 500000);
+        return this.getItemSetProfit(27690, [27681, 27687, 27684], 500000);
+
       if (this.filter === 'Lance')
         return this.getItemSetProfit(22978, [22966, 11889]);
+
+      if (this.filter === 'Kodai Wand')
+        return this.getItemSetProfit(21006, [21043, 6914]);
+
+      if (this.filter === 'Inquisitor')
+        return this.getItemSetProfit(24488, [24419, 24420, 24421]);
+
+      if (this.filter === 'Ancestral')
+        return this.getItemSetProfit(21049, [21018, 21021, 21024]);
+
+      // if (this.filter === 'Odium Ward')
+      //   return this.getItemSetProfit(11926, [11928, 11929, 21030]);
+
+      if (this.filter === 'Malediction Ward')
+        return this.getItemSetProfit(11924, [11931, 11932, 11933]);
+
+      if (this.filter === 'Dragonfire Ward')
+        return this.getItemSetProfit(22003, [22006, 1540]);
+
+      if (this.filter === 'Dragonfire shield')
+        return this.getItemSetProfit(22003, [11286, 1540]);
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())

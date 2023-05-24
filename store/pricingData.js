@@ -54,8 +54,8 @@ const getters = {
         /\s+/g,
         '_'
       )}.png?${item.id}b`,
-      name: `${item.name} (set)`,
-      high: item.high,
+      name: `${item?.name} (set)`,
+      high: item?.high,
       profit: Math.floor(
         highPriceWithoutCommas * 0.99 - totalPrice
       ).toLocaleString()
@@ -65,7 +65,7 @@ const getters = {
   totalPriceConverted: state => (itemSet, itemIds, conversionCost, qty) => {
     let total = 0;
     itemIds.forEach(itemId => {
-      const lowPriceWithoutCommas = state.pricesById[itemId].low.replace(
+      const lowPriceWithoutCommas = state.pricesById[itemId]?.low.replace(
         /,/g,
         ''
       );
