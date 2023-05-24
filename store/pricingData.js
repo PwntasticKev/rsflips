@@ -26,20 +26,6 @@ const getters = {
       };
     }),
 
-  totalPriceConverted: state => (itemSet, itemIds, conversionCost, qty) => {
-    let total = 0;
-    itemIds.forEach(itemId => {
-      const lowPriceWithoutCommas = state.pricesById[itemId].low.replace(
-        /,/g,
-        ''
-      );
-      const price = qty ? lowPriceWithoutCommas * qty : lowPriceWithoutCommas;
-
-      total += parseInt(price, 10);
-    });
-
-    return (total += conversionCost);
-  },
   getItemsById: (state, getters) => itemIds =>
     itemIds.map(itemId => getters.allItems.find(item => item.id === itemId)),
 
@@ -59,6 +45,7 @@ const getters = {
 
       return [modifiedItem, ...getters.getItemsById(itemsToCreateSet)];
     },
+
   getModifiedItem: () => (item, totalPrice) => {
     const highPriceWithoutCommas = parseInt(item.high.replace(/,/g, ''), 10);
     return {
@@ -73,6 +60,21 @@ const getters = {
         highPriceWithoutCommas * 0.99 - totalPrice
       ).toLocaleString()
     };
+  },
+
+  totalPriceConverted: state => (itemSet, itemIds, conversionCost, qty) => {
+    let total = 0;
+    itemIds.forEach(itemId => {
+      const lowPriceWithoutCommas = state.pricesById[itemId].low.replace(
+        /,/g,
+        ''
+      );
+      const price = qty ? lowPriceWithoutCommas * qty : lowPriceWithoutCommas;
+
+      total += parseInt(price, 10);
+    });
+
+    return (total += conversionCost);
   }
 };
 
