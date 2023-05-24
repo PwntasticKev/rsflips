@@ -9,9 +9,13 @@ const getters = {
   allItems: state =>
     state.mapItems.map(item => {
       const priceById = state.pricesById[item.id] || {};
+      console.log(priceById, 'priceByIdpriceByIdpriceById');
+
       const profit = priceById.high
-        ? Math.floor(priceById.high * 0.99 - priceById.low)
+        ? Math.floor(priceById.high * 0.99 - priceById.low).toLocaleString()
         : 0;
+      priceById.low = parseInt(priceById?.low, 10).toLocaleString();
+      priceById.high = parseInt(priceById?.high, 10).toLocaleString();
       return {
         ...item,
         ...priceById,

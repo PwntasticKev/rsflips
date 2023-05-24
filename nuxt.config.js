@@ -16,11 +16,11 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
+  version: 2,
   builds: [
     {
       src: 'nuxt.config.js',
-      use: '@nuxtjs/vercel-builder',
-      config: {}
+      use: '@nuxtjs/vercel-builder'
     }
   ],
 

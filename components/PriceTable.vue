@@ -29,7 +29,7 @@
         <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
         <template slot="item.img" slot-scope="{ item }">
           <td>
-            <v-img :alt="item.name" contain :src="item.img" width="75%" />
+            <v-img :alt="item.name" contain :src="item.img" width="65%" />
           </td>
         </template>
         <template slot="item.high" slot-scope="{ item }">
