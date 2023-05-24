@@ -96,19 +96,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters('pricingData', [
-      'allItems',
-      'venatorFilter',
-      'justicarFilter',
-      'voidwakerFilter',
-      'dragonHunterLance'
-    ]),
+    ...mapGetters('pricingData', ['allItems', 'getItemSetProfit']),
     filteredItems() {
-      if (this.filter === 'Venator') return this.venatorFilter;
+      if (this.filter === 'Venator')
+        return this.getItemSetProfit(27612, [27614], 0, 5);
 
-      if (this.filter === 'Justicar') return this.justicarFilter;
-      if (this.filter === 'Voidwaker') return this.voidwakerFilter;
-      if (this.filter === 'Lance') return this.dragonHunterLance;
+      if (this.filter === 'Justicar')
+        return this.getItemSetProfit(22438, [22327, 22326, 22328]);
+      if (this.filter === 'Voidwaker')
+        return this.getItemSetProfit(27690, [27681, 27684, 27687], 500000);
+      if (this.filter === 'Lance')
+        return this.getItemSetProfit(22978, [22966, 11889]);
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
@@ -118,7 +116,7 @@ export default {
   methods: {
     getProfitClass(item) {
       const textColor =
-        item.profit < 0
+        item.profit.replace(/,/g, '') < 0
           ? this.$vuetify.theme.themes.dark.warning
           : this.$vuetify.theme.themes.dark.primary; // Custom text colors
 

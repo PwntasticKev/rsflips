@@ -22,7 +22,7 @@ export default {
     this.getMappingData();
     this.interval = setInterval(() => {
       this.getPricingData();
-    }, 180000);
+    }, 280000);
   },
   beforeDestroy() {
     clearInterval(this.interval);
