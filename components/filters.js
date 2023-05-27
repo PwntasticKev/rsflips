@@ -72,6 +72,16 @@ const filteredItems = (filter, search, getItemSetProfit) => {
   if (filter === 'Primordial boots')
     return getItemSetProfit(13239, [13231, 11840]);
 
+  if (filter === 'Masori Set (f)')
+    return getItemSetProfit(27355, [27235, 27238, 27241]);
+
+  if (filter === 'Masori Helm (f)')
+    return getItemSetProfit(27226, [27226, 27269]);
+  if (filter === 'Masori Plate (f)')
+    return getItemSetProfit(27229, [27229, 27269]);
+  if (filter === 'Masori Chaps (f)')
+    return getItemSetProfit(27232, [27232, 27269]);
+
   return [];
 };
 
@@ -99,7 +109,8 @@ const filterOptions = [
   'Armadyl godsword',
   'Saradomin godsword',
   'Zamorak godsword',
-  'Primordial boots'
+  'Primordial boots',
+  'Masori Set'
 ];
 
 export { filteredItems, filterOptions };
