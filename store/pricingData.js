@@ -31,6 +31,8 @@ const getters = {
 
   getItemSetProfit:
     (state, getters) =>
+    // qty needs to be rethunk. mayeb an object?
+    // example {id: id, qty: 250}
     (itemSet, itemsToCreateSet, conversionCost = 0, qty = null) => {
       const totalPrice = getters.totalPriceConverted(
         itemSet,

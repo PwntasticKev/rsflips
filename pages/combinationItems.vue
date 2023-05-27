@@ -6,10 +6,7 @@
         v-model="search"
         clearable
         label="Search"
-        @click="
-          clearFieldOnClick ? (search = '') : null;
-          filter = 'All';
-        "
+        @click="clearFieldOnClick ? (search = '') : null"
       ></v-text-field>
       <v-select
         v-model="filter"
@@ -30,17 +27,16 @@
         :options="paginationOptions"
         :search="search"
       >
-        <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
-        <template slot="item.img" slot-scope="{ item }">
-          <td class="py-2">
-            <v-img
-              :alt="`Flipping item- ${item.id}`"
-              aspect-ratio="1"
-              contain
-              :src="item.img"
-              width="70%"
-            />
-          </td>
+        <template slot="item.name" slot-scope="{ item }">
+          <td class="py-2">{{ item.name }}</td>
+        </template>
+        <template slot="item.pieces" slot-scope="{ item }">
+          <template>
+            <td v-for="piece in item.pieces" :key="piece.name" class="py-2">
+              {{ piece.name }} - {{ piece.low }}
+              <!--              <br />-->
+            </td>
+          </template>
         </template>
         <template slot="item.high" slot-scope="{ item }">
           <td>{{ item.high }}</td>
@@ -50,9 +46,7 @@
         </template>
         <template slot="item.profit" slot-scope="{ item }">
           <td>
-            <span :style="getProfitClass(item)">
-              {{ item.profit }}
-            </span>
+            <span :style="getProfitClass(item)">{{ item.profit }}</span>
           </td>
         </template>
         <template #top>
@@ -80,7 +74,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { filteredItems, filterOptions } from './filters';
 
 export default {
   name: 'PriceTable',
@@ -88,7 +81,6 @@ export default {
     return {
       clearFieldOnClick: false,
       filter: '',
-      filterOptions,
       paginationOptions: {
         itemsPerPage: 30, // Number of items per page
         page: 1 // Initial page
@@ -98,6 +90,7 @@ export default {
         { text: 'ID', value: 'id', visible: true },
         { text: 'Img', value: 'img', visible: false },
         { text: 'Name', value: 'name', visible: true },
+        { text: 'Pieces', value: 'pieces', visible: true },
         { text: 'Buy Limit', value: 'limit', visible: true },
         { text: 'Buy Price', value: 'low', visible: true },
         { text: 'Sell Price', value: 'high', visible: true },
@@ -109,8 +102,22 @@ export default {
   computed: {
     ...mapGetters('pricingData', ['allItems', 'getItemSetProfit']),
     filteredItems() {
-      if (this.filter && this.filter !== 'All')
-        return filteredItems(this.filter, this.search, this.getItemSetProfit);
+      const combinedItems = [
+        ...this.getItemSetProfit(27612, [27614], 0, 5),
+        ...this.getItemSetProfit(22438, [22327, 22326, 22328]),
+        ...this.getItemSetProfit(27690, [27681, 27687, 27684], 500000),
+        ...this.getItemSetProfit(22978, [22966, 11889]),
+        ...this.getItemSetProfit(21006, [21043, 6914]),
+        ...this.getItemSetProfit(24488, [24419, 24420, 24421]),
+        ...this.getItemSetProfit(21049, [21018, 21021, 21024]),
+        ...this.getItemSetProfit(11924, [11931, 11932, 11933]),
+        ...this.getItemSetProfit(22003, [22006, 1540]),
+        ...this.getItemSetProfit(22003, [11286, 1540]),
+        ...this.getItemSetProfit(13271, [13265, 5940]),
+        ...this.getItemSetProfit(12902, [11791, 12932])
+      ];
+
+      console.log(combinedItems);
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
