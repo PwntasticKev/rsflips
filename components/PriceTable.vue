@@ -35,7 +35,7 @@
           indeterminate
           size="24"
         ></v-progress-circular>
-        <v-icon v-else>mdi-check</v-icon>
+        <v-icon v-else>mdi-refresh</v-icon>
       </v-btn>
       <v-data-table
         :footer-props="{
