@@ -1,6 +1,6 @@
 <template>
   <div>
-    <price-table></price-table>
+    <price-table @refetch-data="getPricingData()"></price-table>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
     this.getMappingData();
     this.interval = setInterval(() => {
       this.getPricingData();
-    }, 300000);
+    }, 600000);
   },
   beforeDestroy() {
     clearInterval(this.interval);

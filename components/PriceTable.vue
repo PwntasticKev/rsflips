@@ -21,6 +21,22 @@
     </v-card-title>
 
     <v-card-text>
+      <v-btn
+        color="primary"
+        :disabled="loading"
+        fab
+        :loading="loading"
+        small
+        @click="$emit('refetch-data')"
+      >
+        <v-progress-circular
+          v-if="loading"
+          color="white"
+          indeterminate
+          size="24"
+        ></v-progress-circular>
+        <v-icon v-else>mdi-check</v-icon>
+      </v-btn>
       <v-data-table
         :footer-props="{
           'items-per-page-options': [10, 30, 50, 100]
@@ -55,24 +71,6 @@
             </span>
           </td>
         </template>
-        <template #top>
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn text v-bind="attrs" v-on="on">Columns</v-btn>
-            </template>
-
-            <v-card>
-              <v-list dense>
-                <v-list-item v-for="column in tableHeaders" :key="column.text">
-                  <v-checkbox
-                    v-model="column.visible"
-                    :label="column.text"
-                  ></v-checkbox>
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-menu>
-        </template>
       </v-data-table>
     </v-card-text>
   </v-card>
@@ -80,6 +78,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+// eslint-disable-next-line
 import { filteredItems, filterOptions } from './filters';
 
 export default {
@@ -93,6 +92,7 @@ export default {
         itemsPerPage: 30, // Number of items per page
         page: 1 // Initial page
       },
+      loading: false,
       search: '',
       tableHeaders: [
         { text: 'ID', value: 'id', visible: true },
@@ -109,6 +109,8 @@ export default {
   computed: {
     ...mapGetters('pricingData', ['allItems', 'getItemSetProfit']),
     filteredItems() {
+      // if (typeof window !== 'undefined')
+      //   window.localStorage.setItem('filter', this.filter);
       if (this.filter && this.filter !== 'All')
         return filteredItems(this.filter, this.search, this.getItemSetProfit);
 
@@ -122,13 +124,19 @@ export default {
       const textColor =
         `${item?.profit}`.replace(/,/g, '') < 0
           ? this.$vuetify.theme.themes.dark.warning
-          : this.$vuetify.theme.themes.dark.primary; // Custom text colors
+          : this.$vuetify.theme.themes.dark.success; // Custom text colors
 
       return {
         'font-weight': 'bold',
         color: textColor
       };
     }
+  },
+  created() {
+    // if (typeof window !== 'undefined') {
+    //   const filter = window.localStorage.getItem('filter');
+    //   this.filter = filter;
+    // }
   }
 };
 </script>

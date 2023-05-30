@@ -33,14 +33,14 @@ const getters = {
     (state, getters) =>
     // qty needs to be rethunk. mayeb an object?
     // example {id: id, qty: 250}
-    (itemSet, itemsToCreateSet, conversionCost = 0, qty = null) => {
+    (itemSet, itemsToCreateSet, conversionCost = 0, qty = {}) => {
       const totalPrice = getters.totalPriceConverted(
         itemSet,
         itemsToCreateSet,
         conversionCost,
         qty
       );
-
+      // item to be converted to.
       const originalItem = getters.allItems.find(item => item.id === itemSet);
 
       const modifiedItem = getters.getModifiedItem(originalItem, totalPrice);
@@ -64,20 +64,31 @@ const getters = {
     };
   },
 
-  totalPriceConverted: state => (itemSet, itemIds, conversionCost, qty) => {
-    let total = 0;
-    itemIds.forEach(itemId => {
-      const lowPriceWithoutCommas = state.pricesById[itemId]?.low.replace(
-        /,/g,
-        ''
-      );
-      const price = qty ? lowPriceWithoutCommas * qty : lowPriceWithoutCommas;
+  totalPriceConverted:
+    state =>
+    (itemSet, itemIds, conversionCost, qty = null) => {
+      let total = 0;
 
-      total += parseInt(price, 10);
-    });
+      // Calculate qtyCalculatedNoCommas
+      const qtyItemLow =
+        qty && state.pricesById[qty.id]
+          ? state.pricesById[qty.id].low.replace(/,/g, '')
+          : 0;
+      const qtyItemNoCommas = qtyItemLow * (qty && qty.qty ? qty.qty - 1 : 0);
 
-    return (total += conversionCost);
-  }
+      itemIds.forEach(itemId => {
+        const lowPriceNoCommas = state.pricesById[itemId]?.low.replace(
+          /,/g,
+          ''
+        );
+        // find the item's low price.
+        const price = lowPriceNoCommas;
+
+        total += parseInt(price, 10);
+      });
+
+      return (total += qtyItemNoCommas + conversionCost);
+    }
 };
 
 const mutations = {
