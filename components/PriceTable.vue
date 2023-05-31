@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 // eslint-disable-next-line
 import Filters from './filters';
 
@@ -145,6 +145,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions('pricingData', ['getPricingData', 'getMappingData']),
+
     getProfitClass(item) {
       const textColor =
         `${item?.profit}`.replace(/,/g, '') < 0

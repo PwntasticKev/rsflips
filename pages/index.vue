@@ -1,6 +1,12 @@
 <template>
   <div>
-    <price-table @refetch-data="getPricingData()"></price-table>
+    <price-table
+      :key="key"
+      @refetch-data="
+        getPricingData();
+        key + 1;
+      "
+    ></price-table>
   </div>
 </template>
 
@@ -13,6 +19,11 @@ export default {
   name: 'IndexPage',
   components: {
     PriceTable
+  },
+  data() {
+    return {
+      key: 0
+    };
   },
   methods: {
     ...mapActions('pricingData', ['getPricingData', 'getMappingData'])

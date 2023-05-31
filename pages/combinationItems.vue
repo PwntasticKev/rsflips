@@ -6,91 +6,96 @@
         v-model="search"
         clearable
         label="Search"
-        @click="clearFieldOnClick ? (search = '') : null"
+        @click="
+          searchOnClick ? (search = '') : null;
+          filter = 'All';
+        "
       ></v-text-field>
       <v-select
-        v-model="filter"
+        v-model="chooseFilter"
         :items="filterOptions"
         label="Filter"
         outlined
         @click="search = ''"
       ></v-select>
+      <v-btn
+        color="primary"
+        :disabled="loading"
+        fab
+        :loading="loading"
+        small
+        @click="$emit('refetch-data')"
+      >
+        <v-progress-circular
+          v-if="loading"
+          color="white"
+          indeterminate
+          size="24"
+        ></v-progress-circular>
+        <v-icon v-else>mdi-refresh</v-icon>
+      </v-btn>
     </v-card-title>
 
-    <v-card-text>
-      <v-data-table
-        :footer-props="{
-          'items-per-page-options': [10, 30, 50, 100]
-        }"
-        :headers="tableHeaders"
-        :items="filteredItems"
-        :options="paginationOptions"
-        :search="search"
-      >
-        <template slot="item.name" slot-scope="{ item }">
-          <td class="py-2">{{ item.name }}</td>
-        </template>
-        <template slot="item.pieces" slot-scope="{ item }">
-          <template>
-            <td v-for="piece in item.pieces" :key="piece.name" class="py-2">
-              {{ piece.name }} - {{ piece.low }}
-              <!--              <br />-->
-            </td>
-          </template>
-        </template>
-        <template slot="item.high" slot-scope="{ item }">
-          <td>{{ item.high }}</td>
-        </template>
-        <template slot="item.low" slot-scope="{ item }">
-          <td>{{ item.low }}</td>
-        </template>
-        <template slot="item.profit" slot-scope="{ item }">
-          <td>
-            <span :style="getProfitClass(item)">{{ item.profit }}</span>
-          </td>
-        </template>
-        <template #top>
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn text v-bind="attrs" v-on="on">Columns</v-btn>
-            </template>
-
-            <v-card>
-              <v-list dense>
-                <v-list-item v-for="column in tableHeaders" :key="column.text">
-                  <v-checkbox
-                    v-model="column.visible"
-                    :label="column.text"
-                  ></v-checkbox>
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-menu>
-        </template>
-      </v-data-table>
-    </v-card-text>
+    <v-data-table
+      :footer-props="{
+        'items-per-page-options': [10, 30, 50, 100]
+      }"
+      :headers="tableHeaders"
+      :items="filteredItems"
+      :options="paginationOptions"
+      :search="search"
+    >
+      <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
+      <template slot="item.img" slot-scope="{ item }">
+        <td class="py-2">
+          <v-img
+            :alt="`Flipping item- ${item.id}`"
+            aspect-ratio="1"
+            contain
+            :src="item.img"
+            width="70%"
+          />
+        </td>
+      </template>
+      <template slot="item.high" slot-scope="{ item }">
+        <td>{{ item.high }}</td>
+      </template>
+      <template slot="item.low" slot-scope="{ item }">
+        <td>{{ item.low }}</td>
+      </template>
+      <template slot="item.profit" slot-scope="{ item }">
+        <td>
+          <span :style="getProfitClass(item)">
+            {{ item.profit }}
+          </span>
+        </td>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+// eslint-disable-next-line
+import Filters from '../components/itemSetFilters';
 
 export default {
-  name: 'PriceTable',
+  name: 'ComboItemsTable',
   data() {
     return {
-      clearFieldOnClick: false,
+      searchOnClick: null,
       filter: '',
+      filterOptions: Filters.filterOptions,
       paginationOptions: {
         itemsPerPage: 30, // Number of items per page
         page: 1 // Initial page
       },
+      loading: false,
       search: '',
       tableHeaders: [
         { text: 'ID', value: 'id', visible: true },
         { text: 'Img', value: 'img', visible: false },
         { text: 'Name', value: 'name', visible: true },
-        { text: 'Pieces', value: 'pieces', visible: true },
         { text: 'Buy Limit', value: 'limit', visible: true },
         { text: 'Buy Price', value: 'low', visible: true },
         { text: 'Sell Price', value: 'high', visible: true },
@@ -101,40 +106,69 @@ export default {
 
   computed: {
     ...mapGetters('pricingData', ['allItems', 'getItemSetProfit']),
-    filteredItems() {
-      const combinedItems = [
-        ...this.getItemSetProfit(27612, [27614], 0, 5),
-        ...this.getItemSetProfit(22438, [22327, 22326, 22328]),
-        ...this.getItemSetProfit(27690, [27681, 27687, 27684], 500000),
-        ...this.getItemSetProfit(22978, [22966, 11889]),
-        ...this.getItemSetProfit(21006, [21043, 6914]),
-        ...this.getItemSetProfit(24488, [24419, 24420, 24421]),
-        ...this.getItemSetProfit(21049, [21018, 21021, 21024]),
-        ...this.getItemSetProfit(11924, [11931, 11932, 11933]),
-        ...this.getItemSetProfit(22003, [22006, 1540]),
-        ...this.getItemSetProfit(22003, [11286, 1540]),
-        ...this.getItemSetProfit(13271, [13265, 5940]),
-        ...this.getItemSetProfit(12902, [11791, 12932])
-      ];
 
-      console.log(combinedItems);
+    chooseFilter: {
+      get() {
+        return this.filter;
+      },
+      set(v) {
+        if (process.client) {
+          localStorage.setItem('filterSelected', JSON.stringify(v));
+          this.filter = v;
+        }
+      }
+    },
+    clearFieldOnClick: {
+      get() {
+        return this.searchOnClick;
+      },
+      set(v) {
+        if (process.client) {
+          localStorage.setItem('clearSearchOnClick', JSON.stringify(v));
+          this.searchOnClick = v;
+        }
+      }
+    },
+
+    filteredItems() {
+      if (this.filter && this.filter !== 'All') {
+        return Filters.filteredItems(
+          this.filter,
+          this.search,
+          this.getItemSetProfit
+        );
+      }
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
       );
     }
   },
+  async asyncData({ store }) {
+    await store.dispatch('pricingData/getPricingData');
+    await store.dispatch('pricingData/getMappingData');
+  },
   methods: {
     getProfitClass(item) {
       const textColor =
         `${item?.profit}`.replace(/,/g, '') < 0
           ? this.$vuetify.theme.themes.dark.warning
-          : this.$vuetify.theme.themes.dark.primary; // Custom text colors
+          : this.$vuetify.theme.themes.dark.success; // Custom text colors
 
       return {
         'font-weight': 'bold',
         color: textColor
       };
+    }
+  },
+  mounted() {
+    if (process.client) {
+      const searchOption = localStorage.getItem('clearSearchOnClick');
+      const filterOption = localStorage.getItem('filterSelected');
+      if (JSON.parse(searchOption))
+        this.searchOnClick = JSON.parse(searchOption);
+
+      if (JSON.parse(filterOption)) this.filter = JSON.parse(filterOption);
     }
   }
 };

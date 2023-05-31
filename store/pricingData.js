@@ -58,7 +58,9 @@ const getters = {
     },
 
   getModifiedItem: () => (item, totalPrice) => {
-    const highPriceWithoutCommas = parseInt(item.high.replace(/,/g, ''), 10);
+    const highPriceWithoutCommas = item.high
+      ? parseInt(item.high.replace(/,/g, ''), 10)
+      : 0;
     const formatter = new Intl.NumberFormat();
 
     return {

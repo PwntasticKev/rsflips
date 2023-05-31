@@ -78,13 +78,8 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Armor Sets',
-          to: '/armorSets'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Item Sets',
-          to: '/itemSets'
+          title: 'Combination Sets',
+          to: '/combinationItems'
         },
         {
           icon: 'mdi-chart-bubble',
