@@ -17,9 +17,11 @@ export default {
   methods: {
     ...mapActions('pricingData', ['getPricingData', 'getMappingData'])
   },
-  created() {
-    this.getPricingData();
-    this.getMappingData();
+  async asyncData({ store }) {
+    await store.dispatch('pricingData/getPricingData');
+    await store.dispatch('pricingData/getMappingData');
+  },
+  async created() {
     this.interval = setInterval(() => {
       this.getPricingData();
     }, 600000);

@@ -7,20 +7,17 @@
         clearable
         label="Search"
         @click="
-          clearFieldOnClick ? (search = '') : null;
+          searchOnClick ? (search = '') : null;
           filter = 'All';
         "
       ></v-text-field>
       <v-select
-        v-model="filter"
+        v-model="chooseFilter"
         :items="filterOptions"
         label="Filter"
         outlined
         @click="search = ''"
       ></v-select>
-    </v-card-title>
-
-    <v-card-text>
       <v-btn
         color="primary"
         :disabled="loading"
@@ -37,57 +34,58 @@
         ></v-progress-circular>
         <v-icon v-else>mdi-refresh</v-icon>
       </v-btn>
-      <v-data-table
-        :footer-props="{
-          'items-per-page-options': [10, 30, 50, 100]
-        }"
-        :headers="tableHeaders"
-        :items="filteredItems"
-        :options="paginationOptions"
-        :search="search"
-      >
-        <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
-        <template slot="item.img" slot-scope="{ item }">
-          <td class="py-2">
-            <v-img
-              :alt="`Flipping item- ${item.id}`"
-              aspect-ratio="1"
-              contain
-              :src="item.img"
-              width="70%"
-            />
-          </td>
-        </template>
-        <template slot="item.high" slot-scope="{ item }">
-          <td>{{ item.high }}</td>
-        </template>
-        <template slot="item.low" slot-scope="{ item }">
-          <td>{{ item.low }}</td>
-        </template>
-        <template slot="item.profit" slot-scope="{ item }">
-          <td>
-            <span :style="getProfitClass(item)">
-              {{ item.profit }}
-            </span>
-          </td>
-        </template>
-      </v-data-table>
-    </v-card-text>
+    </v-card-title>
+
+    <v-data-table
+      :footer-props="{
+        'items-per-page-options': [10, 30, 50, 100]
+      }"
+      :headers="tableHeaders"
+      :items="filteredItems"
+      :options="paginationOptions"
+      :search="search"
+    >
+      <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
+      <template slot="item.img" slot-scope="{ item }">
+        <td class="py-2">
+          <v-img
+            :alt="`Flipping item- ${item.id}`"
+            aspect-ratio="1"
+            contain
+            :src="item.img"
+            width="70%"
+          />
+        </td>
+      </template>
+      <template slot="item.high" slot-scope="{ item }">
+        <td>{{ item.high }}</td>
+      </template>
+      <template slot="item.low" slot-scope="{ item }">
+        <td>{{ item.low }}</td>
+      </template>
+      <template slot="item.profit" slot-scope="{ item }">
+        <td>
+          <span :style="getProfitClass(item)">
+            {{ item.profit }}
+          </span>
+        </td>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 // eslint-disable-next-line
-import { filteredItems, filterOptions } from './filters';
+import Filters from './filters';
 
 export default {
   name: 'PriceTable',
   data() {
     return {
-      clearFieldOnClick: false,
+      searchOnClick: null,
       filter: '',
-      filterOptions,
+      filterOptions: Filters.filterOptions,
       paginationOptions: {
         itemsPerPage: 30, // Number of items per page
         page: 1 // Initial page
@@ -108,11 +106,38 @@ export default {
 
   computed: {
     ...mapGetters('pricingData', ['allItems', 'getItemSetProfit']),
+
+    chooseFilter: {
+      get() {
+        return this.filter;
+      },
+      set(v) {
+        if (process.client) {
+          localStorage.setItem('filterSelected', JSON.stringify(v));
+          this.filter = v;
+        }
+      }
+    },
+    clearFieldOnClick: {
+      get() {
+        return this.searchOnClick;
+      },
+      set(v) {
+        if (process.client) {
+          localStorage.setItem('clearSearchOnClick', JSON.stringify(v));
+          this.searchOnClick = v;
+        }
+      }
+    },
+
     filteredItems() {
-      // if (typeof window !== 'undefined')
-      //   window.localStorage.setItem('filter', this.filter);
-      if (this.filter && this.filter !== 'All')
-        return filteredItems(this.filter, this.search, this.getItemSetProfit);
+      if (this.filter && this.filter !== 'All') {
+        return Filters.filteredItems(
+          this.filter,
+          this.search,
+          this.getItemSetProfit
+        );
+      }
 
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
@@ -132,11 +157,15 @@ export default {
       };
     }
   },
-  created() {
-    // if (typeof window !== 'undefined') {
-    //   const filter = window.localStorage.getItem('filter');
-    //   this.filter = filter;
-    // }
+  mounted() {
+    if (process.client) {
+      const searchOption = localStorage.getItem('clearSearchOnClick');
+      const filterOption = localStorage.getItem('filterSelected');
+      if (JSON.parse(searchOption))
+        this.searchOnClick = JSON.parse(searchOption);
+
+      if (JSON.parse(filterOption)) this.filter = JSON.parse(filterOption);
+    }
   }
 };
 </script>

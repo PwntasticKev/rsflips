@@ -8,17 +8,26 @@ const state = {
 const getters = {
   allItems: state =>
     state.mapItems.map(item => {
-      const priceById = state.pricesById[item.id] || {};
+      const priceById = state.pricesById?.[item.id] || {};
+      const profit =
+        priceById.high && priceById.low
+          ? new Intl.NumberFormat().format(
+              Math.floor(priceById.high * 0.99 - priceById.low)
+            )
+          : 'N/A';
+      const low = priceById.low
+        ? new Intl.NumberFormat().format(parseInt(priceById.low, 10))
+        : 'N/A';
+      const high = priceById.high
+        ? new Intl.NumberFormat().format(parseInt(priceById.high, 10))
+        : 'N/A';
 
-      const profit = priceById.high
-        ? Math.floor(priceById.high * 0.99 - priceById.low).toLocaleString()
-        : 0;
-      priceById.low = parseInt(priceById?.low, 10).toLocaleString();
-      priceById.high = parseInt(priceById?.high, 10).toLocaleString();
       return {
         ...item,
         ...priceById,
         profit,
+        low,
+        high,
         img: `https://oldschool.runescape.wiki/images/c/c1/${item.name.replace(
           /\s+/g,
           '_'
@@ -50,6 +59,8 @@ const getters = {
 
   getModifiedItem: () => (item, totalPrice) => {
     const highPriceWithoutCommas = parseInt(item.high.replace(/,/g, ''), 10);
+    const formatter = new Intl.NumberFormat();
+
     return {
       id: 'SET-Price',
       img: `https://oldschool.runescape.wiki/images/c/c1/${item.name.replace(
@@ -57,10 +68,10 @@ const getters = {
         '_'
       )}.png?${item.id}b`,
       name: `${item?.name} (set)`,
-      high: item?.high,
-      profit: Math.floor(
-        highPriceWithoutCommas * 0.99 - totalPrice
-      ).toLocaleString()
+      high: formatter.format(highPriceWithoutCommas),
+      profit: formatter.format(
+        Math.floor(highPriceWithoutCommas * 0.99 - totalPrice)
+      )
     };
   },
 
@@ -69,25 +80,25 @@ const getters = {
     (itemSet, itemIds, conversionCost, qty = null) => {
       let total = 0;
 
-      // Calculate qtyCalculatedNoCommas
+      // Calculate qtyItemNoCommas
       const qtyItemLow =
         qty && state.pricesById[qty.id]
-          ? state.pricesById[qty.id].low.replace(/,/g, '')
+          ? String(state.pricesById[qty.id].low).replace(/,/g, '')
           : 0;
       const qtyItemNoCommas = qtyItemLow * (qty && qty.qty ? qty.qty - 1 : 0);
 
       itemIds.forEach(itemId => {
-        const lowPriceNoCommas = state.pricesById[itemId]?.low.replace(
+        const lowPriceNoCommas = String(state.pricesById[itemId]?.low).replace(
           /,/g,
           ''
         );
         // find the item's low price.
-        const price = lowPriceNoCommas;
+        const price = lowPriceNoCommas ? parseInt(lowPriceNoCommas, 10) : 0;
 
-        total += parseInt(price, 10);
+        total += price;
       });
 
-      return (total += qtyItemNoCommas + conversionCost);
+      return total + qtyItemNoCommas + conversionCost;
     }
 };
 
@@ -115,6 +126,15 @@ const actions = {
   },
   async getMappingData({ state, commit }) {
     if (state.mapItems.length > 0) return;
+
+    if (process.client) {
+      const storedData = localStorage.getItem('pricingData');
+      if (storedData) {
+        console.log('theres data stored');
+        commit('SET_ITEMS', JSON.parse(storedData));
+        return;
+      }
+    }
 
     try {
       const { data } = await axios.get(
