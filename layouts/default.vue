@@ -90,7 +90,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Flip it Bro'
+      title: 'Grand Exchange Flips'
     };
   }
 };
