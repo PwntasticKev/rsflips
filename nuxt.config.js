@@ -65,6 +65,20 @@ export default {
     '@nuxtjs/pwa'
   ],
 
+  auth: {
+    strategies: {
+      auth0: {
+        domain: 'pwntastic.auth0.com',
+        clientId: process.env.AUTH0_CLIENT_ID,
+        audience: 'https://my-api-domain.com/',
+        scope: ['openid', 'profile', 'email', 'offline_access'],
+        responseType: 'code',
+        grantType: 'authorization_code',
+        codeChallengeMethod: 'S256'
+      }
+    }
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308

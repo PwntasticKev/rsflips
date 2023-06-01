@@ -18,22 +18,39 @@
         outlined
         @click="search = ''"
       ></v-select>
-      <v-btn
-        color="primary"
-        :disabled="loading"
-        fab
-        :loading="loading"
-        small
-        @click="$emit('refetch-data')"
+
+      <v-snackbar
+        v-model="showSnackbar"
+        bottom
+        color="success"
+        :timeout="snackbarTimeout"
       >
-        <v-progress-circular
-          v-if="loading"
-          color="white"
-          indeterminate
-          size="24"
-        ></v-progress-circular>
-        <v-icon v-else>mdi-refresh</v-icon>
-      </v-btn>
+        Data loaded
+      </v-snackbar>
+
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            color="primary"
+            :disabled="loading"
+            fab
+            :loading="loading"
+            small
+            v-on="on"
+            @click="debouncedClick"
+          >
+            <v-progress-circular
+              v-if="loading"
+              color="white"
+              indeterminate
+              size="24"
+            ></v-progress-circular>
+            <v-icon v-else>mdi-refresh</v-icon>
+          </v-btn>
+        </template>
+        <span>Reload Data</span>
+        <!-- Tooltip content -->
+      </v-tooltip>
     </v-card-title>
 
     <v-data-table
@@ -76,6 +93,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { debounce } from 'lodash';
 // eslint-disable-next-line
 import Filters from './filters';
 
@@ -92,6 +110,8 @@ export default {
       },
       loading: false,
       search: '',
+      showSnackbar: false,
+      snackbarTimeout: 3000,
       tableHeaders: [
         { text: 'ID', value: 'id', visible: true },
         { text: 'Img', value: 'img', visible: false },
@@ -146,6 +166,24 @@ export default {
   },
   methods: {
     ...mapActions('pricingData', ['getPricingData', 'getMappingData']),
+
+    debouncedClick: debounce(function () {
+      // Perform your asynchronous task here
+      this.loading = true;
+      this.$emit('refetch-data');
+
+      // Simulate an asynchronous task
+      // Replace this with your actual task logic
+      new Promise(resolve => {
+        setTimeout(() => {
+          // Task completed
+          resolve();
+        }, 2000); // Simulating a 2-second delay
+      }).then(() => {
+        this.loading = false;
+        this.showSnackbar = true;
+      });
+    }, 200),
 
     getProfitClass(item) {
       const textColor =

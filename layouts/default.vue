@@ -40,6 +40,9 @@
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
+      <v-btn icon @click="login">
+        <v-icon>mdi-circle</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -92,6 +95,12 @@ export default {
       rightDrawer: false,
       title: 'Grand Exchange Flips'
     };
+  },
+  methods: {
+    login() {
+      console.log(this.$auth);
+      this.$auth.loginWith('auth0');
+    }
   }
 };
 </script>

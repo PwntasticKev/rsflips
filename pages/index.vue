@@ -29,13 +29,13 @@ export default {
     ...mapActions('pricingData', ['getPricingData', 'getMappingData'])
   },
   async asyncData({ store }) {
-    await store.dispatch('pricingData/getPricingData');
     await store.dispatch('pricingData/getMappingData');
+    await store.dispatch('pricingData/getPricingData');
   },
   async created() {
     this.interval = setInterval(() => {
       this.getPricingData();
-    }, 600000);
+    }, 180000);
   },
   beforeDestroy() {
     clearInterval(this.interval);
