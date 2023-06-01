@@ -133,19 +133,18 @@ const actions = {
       const storedData = localStorage.getItem('pricingData');
       if (storedData) {
         console.log('theres data stored');
-        commit('SET_ITEMS', JSON.parse(storedData));
-        return;
+        commit('SET_ITEMS', JSON.parse(storedData.mapItems));
       }
-    }
+    } else {
+      try {
+        const { data } = await axios.get(
+          'https://prices.runescape.wiki/api/v1/osrs/mapping'
+        );
 
-    try {
-      const { data } = await axios.get(
-        'https://prices.runescape.wiki/api/v1/osrs/mapping'
-      );
-
-      commit('SET_ITEMS', data);
-    } catch (error) {
-      console.error('Error fetching Pricing data:', error);
+        commit('SET_ITEMS', data);
+      } catch (error) {
+        console.error('Error fetching Pricing data:', error);
+      }
     }
   }
 };

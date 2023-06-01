@@ -7,8 +7,13 @@ import pricingData from './pricingData';
 Vue.use(Vuex);
 
 const vuexLocal = new VuexPersistence({
-  storage: process.client ? cookieUniversalNuxt : null, // Use cookie-universal-nuxt on the client-side
-  paths: ['modules']
+  storage: process.client ? cookieUniversalNuxt : null,
+  modules: ['pricingData'], // Specify the 'pricingData' module
+  reducer: state => ({
+    pricingData: {
+      mapItems: state.pricingData.mapItems // Only persist the 'mapItems' property from the 'pricingData' module
+    }
+  })
 });
 
 const store = () =>
