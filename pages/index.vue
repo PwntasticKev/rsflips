@@ -56,12 +56,6 @@ export default {
   async created() {
     await this.getPricingData();
     this.loading = false;
-    this.interval = setInterval(() => {
-      this.getPricingData();
-    }, 180000);
-  },
-  beforeDestroy() {
-    clearInterval(this.interval);
   }
 };
 </script>

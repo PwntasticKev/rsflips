@@ -25,7 +25,7 @@
         color="success"
         :timeout="snackbarTimeout"
       >
-        Data loaded
+        Data has been refetched ( every 3 minutes )
       </v-snackbar>
 
       <v-tooltip top>
@@ -206,6 +206,15 @@ export default {
 
       if (JSON.parse(filterOption)) this.filter = JSON.parse(filterOption);
     }
+  },
+  async created() {
+    this.interval = setInterval(() => {
+      this.getPricingData();
+      this.showSnackbar = true;
+    }, 180000);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   }
 };
 </script>
