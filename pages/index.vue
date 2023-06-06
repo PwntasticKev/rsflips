@@ -1,20 +1,12 @@
 <template>
   <div>
-    <v-data-table
+    <v-skeleton-loader
       v-if="loading"
-      :headers="headers"
-      :items="loading ? skeletonData : pricingData"
-      :loading="loading"
-    >
-      <template v-slot:items>
-        <tr>
-          <td colspan="3">
-            <v-skeleton-loader :rows="5" type="table"></v-skeleton-loader>
-          </td>
-        </tr>
-      </template>
-    </v-data-table>
+      :rows="5"
+      type="table"
+    ></v-skeleton-loader>
     <price-table
+      v-else
       :key="key"
       @refetch-data="
         getPricingData();

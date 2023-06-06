@@ -40,25 +40,19 @@
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <v-btn icon @click="login">
-        <v-icon>mdi-circle</v-icon>
-      </v-btn>
+      <template>
+        <div>
+          <v-btn @click="handleSignIn">Sign In</v-btn>
+          <v-btn @click="handleSignOut">Sign Out</v-btn>
+          <!--          <p v-if="getUser">Logged in as: {{ getUser.displayName }}</p>-->
+        </div>
+      </template>
     </v-app-bar>
     <v-main>
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" fixed :right="right" temporary>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>mdi-repeat</v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -66,12 +60,14 @@
 </template>
 
 <script>
+import { signIn, signOut } from '../firebase';
+
 export default {
   name: 'DefaultLayout',
   data() {
     return {
       clipped: false,
-      drawer: false,
+      drawer: true,
       fixed: false,
       items: [
         {
@@ -91,16 +87,29 @@ export default {
         }
       ],
       miniVariant: false,
-      right: true,
-      rightDrawer: false,
       title: 'Grand Exchange Flips'
     };
   },
   methods: {
-    login() {
-      console.log(this.$auth);
-      this.$auth.loginWith('auth0');
+    async handleSignIn() {
+      try {
+        await signIn(); // Call the signIn function from the named export
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async handleSignOut() {
+      try {
+        await signOut(); // Call the signOut function from the named export
+      } catch (error) {
+        console.error(error);
+      }
     }
+  },
+  computed: {
+    // currentUser() {
+    //   return getUser(); // Call the getUser function from the named export
+    // }
   }
 };
 </script>

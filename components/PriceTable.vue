@@ -1,94 +1,94 @@
 <template>
-  <v-card>
-    <v-card-title>
-      <v-checkbox v-model="clearFieldOnClick"></v-checkbox>
-      <v-text-field
-        v-model="search"
-        clearable
-        label="Search"
-        @click="
-          searchOnClick ? (search = '') : null;
-          filter = 'All';
-        "
-      ></v-text-field>
-      <v-select
-        v-model="chooseFilter"
-        :items="filterOptions"
-        label="Filter"
-        outlined
-        @click="search = ''"
-      ></v-select>
+  <div>
+    <v-tooltip bottom class="bottom-right-tooltip" fixed right>
+      <template v-slot:activator="{ on }">
+        <v-btn
+          color="primary"
+          :disabled="loading"
+          fab
+          :loading="loading"
+          v-on="on"
+          @click="debouncedClick"
+        >
+          <v-progress-circular
+            v-if="loading"
+            color="white"
+            indeterminate
+            size="28"
+          ></v-progress-circular>
+          <v-icon v-else>mdi-refresh</v-icon>
+        </v-btn>
+      </template>
+      <span>Reload Data</span>
+      <!-- Tooltip content -->
+    </v-tooltip>
+    <v-card>
+      <v-card-title>
+        <v-checkbox v-model="clearFieldOnClick"></v-checkbox>
+        <v-text-field
+          v-model="search"
+          clearable
+          label="Search"
+          @click="
+            searchOnClick ? (search = '') : null;
+            filter = 'All';
+          "
+        ></v-text-field>
+        <v-select
+          v-model="chooseFilter"
+          :items="filterOptions"
+          label="Filter"
+          outlined
+          @click="search = ''"
+        ></v-select>
 
-      <v-snackbar
-        v-model="showSnackbar"
-        bottom
-        color="success"
-        :timeout="snackbarTimeout"
+        <v-snackbar
+          v-model="showSnackbar"
+          bottom
+          color="success"
+          :timeout="snackbarTimeout"
+        >
+          Data has been refetched ( every 3 minutes )
+        </v-snackbar>
+      </v-card-title>
+
+      <v-data-table
+        :footer-props="{
+          'items-per-page-options': [10, 30, 50, 100, 200]
+        }"
+        :headers="tableHeaders"
+        :items="filteredItems"
+        :options="paginationOptions"
+        :search="search"
       >
-        Data has been refetched ( every 3 minutes )
-      </v-snackbar>
-
-      <v-tooltip top>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            color="primary"
-            :disabled="loading"
-            fab
-            :loading="loading"
-            small
-            v-on="on"
-            @click="debouncedClick"
-          >
-            <v-progress-circular
-              v-if="loading"
-              color="white"
-              indeterminate
-              size="24"
-            ></v-progress-circular>
-            <v-icon v-else>mdi-refresh</v-icon>
-          </v-btn>
+        <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
+        <template slot="item.img" slot-scope="{ item }">
+          <td class="py-2">
+            <v-img
+              :alt="`Flipping item- ${item.id}`"
+              aspect-ratio="1"
+              contain
+              :src="item.img"
+              width="70%"
+            />
+          </td>
         </template>
-        <span>Reload Data</span>
-        <!-- Tooltip content -->
-      </v-tooltip>
-    </v-card-title>
-
-    <v-data-table
-      :footer-props="{
-        'items-per-page-options': [10, 30, 50, 100]
-      }"
-      :headers="tableHeaders"
-      :items="filteredItems"
-      :options="paginationOptions"
-      :search="search"
-    >
-      <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
-      <template slot="item.img" slot-scope="{ item }">
-        <td class="py-2">
-          <v-img
-            :alt="`Flipping item- ${item.id}`"
-            aspect-ratio="1"
-            contain
-            :src="item.img"
-            width="70%"
-          />
-        </td>
-      </template>
-      <template slot="item.high" slot-scope="{ item }">
-        <td>{{ item.high }}</td>
-      </template>
-      <template slot="item.low" slot-scope="{ item }">
-        <td>{{ item.low }}</td>
-      </template>
-      <template slot="item.profit" slot-scope="{ item }">
-        <td>
-          <span :style="getProfitClass(item)">
-            {{ item.profit }}
-          </span>
-        </td>
-      </template>
-    </v-data-table>
-  </v-card>
+        <template slot="item.high" slot-scope="{ item }">
+          <td>{{ item.high }}</td>
+        </template>
+        <template slot="item.low" slot-scope="{ item }">
+          <td>{{ item.low }}</td>
+        </template>
+        <template slot="item.profit" slot-scope="{ item }">
+          <td>
+            <span :style="getProfitClass(item)">
+              {{ item.profit }}
+            </span>
+          </td>
+        </template>
+      </v-data-table>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -105,7 +105,7 @@ export default {
       filter: '',
       filterOptions: Filters.filterOptions,
       paginationOptions: {
-        itemsPerPage: 30, // Number of items per page
+        itemsPerPage: 200, // Number of items per page
         page: 1 // Initial page
       },
       loading: false,
@@ -167,7 +167,7 @@ export default {
   methods: {
     ...mapActions('pricingData', ['getPricingData', 'getMappingData']),
 
-    debouncedClick: debounce(function () {
+    debouncedClick: debounce(() => {
       // Perform your asynchronous task here
       this.loading = true;
       this.$emit('refetch-data');
@@ -218,3 +218,11 @@ export default {
   }
 };
 </script>
+
+<style scoped lang="scss">
+.bottom-right-tooltip {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+}
+</style>

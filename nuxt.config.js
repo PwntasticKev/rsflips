@@ -2,6 +2,9 @@ import colors from 'vuetify/es5/util/colors';
 
 const path = require('path');
 
+const isDev = process.env.NODE_ENV === 'development';
+const authDomain = isDev ? 'localhost:3000' : 'rsflips-pwntastickev.vercel.app';
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -14,6 +17,12 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/geicon.png' }]
+  },
+
+  privateRuntimeConfig: {
+    apiKey: process.env.WEB_API_KEY,
+    authDomain,
+    projectId: process.env.PROJECT_ID
   },
 
   version: 2,
@@ -39,7 +48,10 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: './store/index.js', ssr: false }],
+  plugins: [
+    { src: './store/index.js', ssr: false },
+    { src: '~/plugins/firebase.js', mode: 'client' }
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -62,20 +74,18 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/firebase'
   ],
 
-  auth: {
-    strategies: {
-      auth0: {
-        domain: 'pwntastic.auth0.com',
-        clientId: process.env.AUTH0_CLIENT_ID,
-        audience: 'https://my-api-domain.com/',
-        scope: ['openid', 'profile', 'email', 'offline_access'],
-        responseType: 'code',
-        grantType: 'authorization_code',
-        codeChallengeMethod: 'S256'
-      }
+  firebase: {
+    config: {
+      apiKey: '<%= options.privateRuntimeConfig.apiKey %>',
+      authDomain: '<%= options.privateRuntimeConfig.authDomain %>',
+      projectId: '<%= options.privateRuntimeConfig.projectId %>'
+    },
+    services: {
+      auth: true // Enable the Firebase Auth service
     }
   },
 

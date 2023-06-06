@@ -7,33 +7,39 @@ const state = {
 
 const getters = {
   allItems: state =>
-    state.mapItems.map(item => {
-      const priceById = state.pricesById?.[item.id] || {};
-      const profit =
-        priceById.high && priceById.low
-          ? new Intl.NumberFormat().format(
-              Math.floor(priceById.high * 0.99 - priceById.low)
-            )
+    state.mapItems
+      .map(item => {
+        const priceById = state.pricesById?.[item.id] || {};
+        const profit =
+          priceById.high && priceById.low
+            ? new Intl.NumberFormat().format(
+                Math.floor(priceById.high * 0.99 - priceById.low)
+              )
+            : 'N/A';
+        const low = priceById.low
+          ? new Intl.NumberFormat().format(parseInt(priceById.low, 10))
           : 'N/A';
-      const low = priceById.low
-        ? new Intl.NumberFormat().format(parseInt(priceById.low, 10))
-        : 'N/A';
-      const high = priceById.high
-        ? new Intl.NumberFormat().format(parseInt(priceById.high, 10))
-        : 'N/A';
+        const high = priceById.high
+          ? new Intl.NumberFormat().format(parseInt(priceById.high, 10))
+          : 'N/A';
 
-      return {
-        ...item,
-        ...priceById,
-        profit,
-        low,
-        high,
-        img: `https://oldschool.runescape.wiki/images/c/c1/${item.name.replace(
-          /\s+/g,
-          '_'
-        )}.png?${item.id}b`
-      };
-    }),
+        return {
+          ...item,
+          ...priceById,
+          profit,
+          low,
+          high,
+          img: `https://oldschool.runescape.wiki/images/c/c1/${item.name.replace(
+            /\s+/g,
+            '_'
+          )}.png?${item.id}b`
+        };
+      })
+      .sort((a, b) => {
+        const profitA = parseInt(a.profit.replace(/,/g, ''), 10);
+        const profitB = parseInt(b.profit.replace(/,/g, ''), 10);
+        return profitB - profitA;
+      }),
 
   getItemsById: (state, getters) => itemIds =>
     itemIds.map(itemId => getters.allItems.find(item => item.id === itemId)),

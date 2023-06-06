@@ -25,6 +25,10 @@ export default {
         return getItemSetProfit(13271, [13265, 5940]);
       case 'Toxic Staff':
         return getItemSetProfit(12902, [11791, 12932]);
+      case 'Serpentine Helm':
+        return getItemSetProfit(12929, [12927]);
+      case 'Blowpipe':
+        return getItemSetProfit(12924, [12922]);
       case 'Zaryte Crossbow':
         return getItemSetProfit(26374, [11785, 26372, 26231], null, {
           id: 26231,
