@@ -89,9 +89,10 @@
       >
         <!--        https://oldschool.runescape.wiki/images/f/fc/A_powdered_wig.png?7263b-->
         <template slot="item.img" slot-scope="{ item }">
-          <td class="py-2">
+          <td class="py-2" style="width: 20%">
             <v-img
               :alt="`Flipping item- ${item.id}`"
+              aspect-ratio="1"
               contain
               :src="item.img"
               width="70%"
