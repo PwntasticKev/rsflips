@@ -24,6 +24,32 @@
     </v-tooltip>
     <v-card>
       <v-card-title>
+        <v-menu class="pa-4" offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" color="primary" icon v-on="on">
+              <v-icon>mdi-menu</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-list dense>
+              <v-subheader>Columns</v-subheader>
+              <v-list-item v-for="header in tableHeaders" :key="header.value">
+                <v-list-item-action>
+                  <v-checkbox
+                    v-model="header.visible"
+                    @click="toggleColumnVisibility(header)"
+                  ></v-checkbox>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title @click="toggleColumnVisibility(header)">
+                    {{ header.text }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-menu>
+
         <v-checkbox v-model="clearFieldOnClick"></v-checkbox>
         <v-text-field
           v-model="search"
@@ -56,7 +82,7 @@
         :footer-props="{
           'items-per-page-options': [10, 30, 50, 100, 200]
         }"
-        :headers="tableHeaders"
+        :headers="visibleHeaders"
         :items="filteredItems"
         :options="paginationOptions"
         :search="search"
@@ -66,7 +92,6 @@
           <td class="py-2">
             <v-img
               :alt="`Flipping item- ${item.id}`"
-              aspect-ratio="1"
               contain
               :src="item.img"
               width="70%"
@@ -162,6 +187,10 @@ export default {
       return this.allItems.filter(item =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
       );
+    },
+
+    visibleHeaders() {
+      return this.tableHeaders.filter(header => header.visible);
     }
   },
   methods: {
@@ -195,12 +224,26 @@ export default {
         'font-weight': 'bold',
         color: textColor
       };
+    },
+
+    toggleColumnVisibility(header) {
+      header.visible = !header.visible;
+      if (process.client) {
+        localStorage.setItem(
+          'columnVisibility',
+          JSON.stringify(this.tableHeaders)
+        );
+      }
     }
   },
   mounted() {
     if (process.client) {
+      const columnVisibility = localStorage.getItem('columnVisibility');
       const searchOption = localStorage.getItem('clearSearchOnClick');
       const filterOption = localStorage.getItem('filterSelected');
+
+      if (columnVisibility) this.tableHeaders = JSON.parse(columnVisibility);
+
       if (JSON.parse(searchOption))
         this.searchOnClick = JSON.parse(searchOption);
 

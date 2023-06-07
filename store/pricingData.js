@@ -36,6 +36,13 @@ const getters = {
         };
       })
       .sort((a, b) => {
+        const has3rdInNameA = a.name.includes('3rd');
+        const has3rdInNameB = b.name.includes('3rd');
+
+        if (has3rdInNameA && has3rdInNameB) return 0;
+        if (has3rdInNameA) return 1; // Move items with '3rd' in their name to the end
+        if (has3rdInNameB) return -1; // Move items with '3rd' in their name to the end
+
         const profitA = parseInt(a.profit.replace(/,/g, ''), 10);
         const profitB = parseInt(b.profit.replace(/,/g, ''), 10);
         return profitB - profitA;

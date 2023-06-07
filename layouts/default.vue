@@ -1,12 +1,6 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      :clipped="clipped"
-      fixed
-      :mini-variant="miniVariant"
-    >
+    <v-navigation-drawer v-model="drawer" app fixed :mini-variant="miniVariant">
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -24,13 +18,10 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app :clipped-left="clipped" fixed>
+    <v-app-bar app fixed>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>mdi-application</v-icon>
       </v-btn>
       <v-btn icon @click.stop="fixed = !fixed">
         <v-icon>mdi-minus</v-icon>
@@ -66,8 +57,7 @@ export default {
   name: 'DefaultLayout',
   data() {
     return {
-      clipped: false,
-      drawer: true,
+      drawer: false,
       fixed: false,
       items: [
         {
@@ -84,6 +74,11 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Clean Herbs',
           to: '/cleanHerbs'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Deaths Coffer',
+          to: '/deathscoffer'
         }
       ],
       miniVariant: false,
