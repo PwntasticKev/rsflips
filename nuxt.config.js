@@ -84,7 +84,7 @@ export default {
   firebase: {
     config: {
       apiKey: 'AIzaSyCw8KYLI9a1IRNCM8RTN7daubMRGOFlZN4',
-      authDomain: 'rsflips-pwntastickev.vercel.app/',
+      authDomain: 'rsflips-pwntastickev.vercel.app',
       projectId: 'grandexchange-a5b29',
       storageBucket: 'grandexchange-a5b29.appspot.com',
       messagingSenderId: '375225017421',
