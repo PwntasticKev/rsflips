@@ -51,8 +51,6 @@
 </template>
 
 <script>
-import { signOut } from '../firebase';
-
 export default {
   name: 'DefaultLayout',
   data() {
