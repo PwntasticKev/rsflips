@@ -77,7 +77,7 @@ const getters = {
     const formatter = new Intl.NumberFormat();
 
     return {
-      id: 'SET-Price',
+      id: 'SET',
       img: `https://oldschool.runescape.wiki/images/c/c1/${item.name.replace(
         /\s+/g,
         '_'

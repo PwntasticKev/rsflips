@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { signIn, signOut } from '../firebase';
+import { signOut } from '../firebase';
 
 export default {
   name: 'DefaultLayout',
@@ -88,16 +88,24 @@ export default {
   methods: {
     async handleSignIn() {
       try {
-        await signIn(); // Call the signIn function from the named export
+        try {
+          const provider = new this.$fireModule.auth.GoogleAuthProvider();
+          const user = await this.$fire.auth.signInWithPopup(provider);
+          console.log(user); // here you can do what you want with the user data
+          this.$router.push('/'); // that return from firebase
+        } catch (e) {
+          // handle the error
+        } // Call the signIn function from the named export
       } catch (error) {
         console.error(error);
       }
     },
     async handleSignOut() {
       try {
-        await signOut(); // Call the signOut function from the named export
-      } catch (error) {
-        console.error(error);
+        await this.$fire.auth.signOut();
+        // User is now signed out
+      } catch (e) {
+        // Handle the error
       }
     }
   },

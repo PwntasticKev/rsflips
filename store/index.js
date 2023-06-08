@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import { cookieUniversalNuxt } from 'cookie-universal-nuxt';
 import pricingData from './pricingData';
+import users from './users';
 
 Vue.use(Vuex);
 
@@ -19,7 +20,8 @@ const vuexLocal = new VuexPersistence({
 const store = () =>
   new Vuex.Store({
     modules: {
-      pricingData
+      pricingData,
+      users
     },
     plugins: [vuexLocal.plugin]
   });

@@ -26,6 +26,9 @@ export default {
   components: {
     PriceTable
   },
+  computed: {
+    ...mapActions('users', ['loadUsers'])
+  },
   data() {
     return {
       loading: true,
@@ -48,6 +51,8 @@ export default {
   async created() {
     await this.getPricingData();
     this.loading = false;
+
+    // this.$store.dispatch('users/loadUsers', this.$fire);
   }
 };
 </script>

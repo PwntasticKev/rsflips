@@ -20,9 +20,12 @@ export default {
   },
 
   privateRuntimeConfig: {
+    appId: process.env.APP_ID,
     apiKey: process.env.WEB_API_KEY,
     authDomain,
-    projectId: process.env.PROJECT_ID
+    projectId: process.env.PROJECT_ID,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    storageBucket: process.env.STORAGE_BUCKET
   },
 
   version: 2,
@@ -80,12 +83,19 @@ export default {
 
   firebase: {
     config: {
-      apiKey: '<%= options.privateRuntimeConfig.apiKey %>',
-      authDomain: '<%= options.privateRuntimeConfig.authDomain %>',
-      projectId: '<%= options.privateRuntimeConfig.projectId %>'
+      apiKey: 'AIzaSyCw8KYLI9a1IRNCM8RTN7daubMRGOFlZN4',
+      authDomain: 'development',
+      projectId: 'grandexchange-a5b29',
+      storageBucket: 'grandexchange-a5b29.appspot.com',
+      messagingSenderId: '375225017421',
+      appId: '1:375225017421:web:691ab39bfc428281e52804'
     },
     services: {
-      auth: true // Enable the Firebase Auth service
+      auth: true,
+      firestore: true,
+      database: true,
+      messaging: true,
+      analytics: true
     }
   },
 

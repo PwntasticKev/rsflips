@@ -24,20 +24,21 @@ export default async function ({ $config }) {
 
 export const signIn = async () => {
   try {
-    if (auth) {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      await auth.signInWithPopup(provider);
-    }
-  } catch (error) {
-    console.error(error);
+    const provider = new this.$fireModule.auth.GoogleAuthProvider();
+    const user = await this.$fire.auth.signInWithPopup(provider);
+    console.log(user); // here you can do what you want with the user data
+    this.$router.push('/'); // that return from firebase
+  } catch (e) {
+    // handle the error
   }
 };
 
 export const signOut = async () => {
   try {
-    if (auth) await auth.signOut();
-  } catch (error) {
-    console.error(error);
+    await this.$fire.auth.signOut();
+    // User is now signed out
+  } catch (e) {
+    // Handle the error
   }
 };
 

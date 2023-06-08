@@ -58,12 +58,12 @@ export default {
         return getItemSetProfit(13239, [13231, 11840]);
       case 'Masori Set (f)':
         return getItemSetProfit(27355, [27235, 27238, 27241]);
-      case 'Masori Helm (f)':
-        return getItemSetProfit(27226, [27226, 27269]);
-      case 'Masori Plate (f)':
-        return getItemSetProfit(27229, [27229, 27269]);
-      case 'Masori Chaps (f)':
-        return getItemSetProfit(27232, [27232, 27269]);
+      case 'Gilded SK (set)':
+        return getItemSetProfit(13038, [3486, 3481, 3485]);
+      case 'Gilded LG (set)':
+        return getItemSetProfit(13036, [3486, 3481, 3483]);
+      case 'Obsidian (set)':
+        return getItemSetProfit(21279, [21298, 21301, 21304]);
       default:
         return [];
     }
@@ -93,6 +93,9 @@ export default {
     'Saradomin godsword',
     'Zamorak godsword',
     'Primordial boots',
-    'Masori Set'
+    'Masori Set (f)',
+    'Gilded SK (set)',
+    'Gilded LG (set)',
+    'Obsidian (set)'
   ]
 };
