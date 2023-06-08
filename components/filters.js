@@ -59,9 +59,9 @@ export default {
       case 'Masori Set (f)':
         return getItemSetProfit(27355, [27235, 27238, 27241]);
       case 'Gilded SK (set)':
-        return getItemSetProfit(13038, [3486, 3481, 3485]);
+        return getItemSetProfit(13038, [3486, 3481, 3485, 3488]);
       case 'Gilded LG (set)':
-        return getItemSetProfit(13036, [3486, 3481, 3483]);
+        return getItemSetProfit(13036, [3486, 3481, 3483, 3488]);
       case 'Obsidian (set)':
         return getItemSetProfit(21279, [21298, 21301, 21304]);
       default:
