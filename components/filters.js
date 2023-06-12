@@ -15,8 +15,8 @@ export default {
         return getItemSetProfit(24488, [24419, 24420, 24421]);
       case 'Ancestral':
         return getItemSetProfit(21049, [21018, 21021, 21024]);
-      case 'Malediction Ward':
-        return getItemSetProfit(11924, [11931, 11932, 11933]);
+      // case 'Malediction Ward':
+      //   return getItemSetProfit(11924, [11931, 11932, 11933]);
       case 'Dragonfire Ward':
         return getItemSetProfit(22003, [22006, 1540]);
       case 'Dragonfire shield':
@@ -29,15 +29,20 @@ export default {
         return getItemSetProfit(12929, [12927]);
       case 'Blowpipe':
         return getItemSetProfit(12924, [12922]);
+      case 'Saturated Heart':
+        return getItemSetProfit(27641, [20724, 27616], null, {
+          id: 27616,
+          qty: 15000
+        });
       case 'Zaryte Crossbow':
         return getItemSetProfit(26374, [11785, 26372, 26231], null, {
           id: 26231,
           qty: 250
         });
-      case 'Ursine Chainmace':
-        return getItemSetProfit(27657, [22542, 27667]);
-      case 'Webweaver Bow':
-        return getItemSetProfit(27652, [22547, 27670]);
+      // case 'Ursine Chainmace':
+      //   return getItemSetProfit(27657, [22542, 27667]);
+      // case 'Webweaver Bow':
+      //   return getItemSetProfit(27652, [22547, 27670]);
       case 'Elysian spirit shield':
         return getItemSetProfit(12817, [12819, 12831]);
       case 'Arcane spirit shield':
