@@ -32,7 +32,7 @@ export default {
       case 'Saturated Heart':
         return getItemSetProfit(27641, [20724, 27616], null, {
           id: 27616,
-          qty: 15000
+          qty: 150000
         });
       case 'Zaryte Crossbow':
         return getItemSetProfit(26374, [11785, 26372, 26231], null, {
