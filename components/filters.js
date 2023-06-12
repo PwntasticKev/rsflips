@@ -69,6 +69,14 @@ export default {
         return getItemSetProfit(13036, [3486, 3481, 3483, 3488]);
       case 'Obsidian (set)':
         return getItemSetProfit(21279, [21298, 21301, 21304]);
+      case 'Super Potion Set':
+        return getItemSetProfit(13066, [2440, 2436, 2442]);
+      case 'Cannon':
+        return getItemSetProfit(12863, [10, 8, 6, 12]);
+      case 'Party Hat':
+        return getItemSetProfit(13173, [1044, 1042, 1038, 1046, 1048, 1040]);
+      case 'Dagon Hai':
+        return getItemSetProfit(24333, [24288, 24291, 24294]);
       default:
         return [];
     }
@@ -102,6 +110,10 @@ export default {
     'Masori Set (f)',
     'Gilded SK (set)',
     'Gilded LG (set)',
-    'Obsidian (set)'
+    'Obsidian (set)',
+    'Super Potion Set',
+    'Cannon',
+    'Party Hat',
+    'Dagon Hai'
   ]
 };
