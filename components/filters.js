@@ -77,6 +77,21 @@ export default {
         return getItemSetProfit(13173, [1044, 1042, 1038, 1046, 1048, 1040]);
       case 'Dagon Hai':
         return getItemSetProfit(24333, [24288, 24291, 24294]);
+      case 'Torva Helm':
+        return getItemSetProfit(26382, [26376, 26394], null, {
+          id: 26394,
+          qty: 1
+        });
+      case 'Torva Plate':
+        return getItemSetProfit(26384, [26378, 26394], null, {
+          id: 26394,
+          qty: 2
+        });
+      case 'Torva Legs':
+        return getItemSetProfit(26386, [26380, 26394], null, {
+          id: 26394,
+          qty: 2
+        });
       default:
         return [];
     }
@@ -114,6 +129,10 @@ export default {
     'Super Potion Set',
     'Cannon',
     'Party Hat',
-    'Dagon Hai'
+    'Dagon Hai',
+    'Torva',
+    'Torva Helm',
+    'Torva Legs',
+    'Torva Plate'
   ]
 };
