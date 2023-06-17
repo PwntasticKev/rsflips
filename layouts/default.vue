@@ -31,13 +31,7 @@
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <template>
-        <div>
-          <v-btn @click="handleSignIn">Sign In</v-btn>
-          <v-btn @click="handleSignOut">Sign Out</v-btn>
-          <!--          <p v-if="getUser">Logged in as: {{ getUser.displayName }}</p>-->
-        </div>
-      </template>
+    
     </v-app-bar>
     <v-main>
       <v-container>
