@@ -2,8 +2,8 @@ import colors from 'vuetify/es5/util/colors';
 
 const path = require('path');
 
-const isDev = process.env.NODE_ENV === 'development';
-const authDomain = isDev ? 'localhost:3000' : 'rsflips-pwntastickev.vercel.app';
+// const isDev = process.env.NODE_ENV === 'development';
+// const authDomain = isDev ? 'localhost:3000' : 'rsflips-pwntastickev.vercel.app';
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -19,14 +19,14 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/geicon.png' }]
   },
 
-  privateRuntimeConfig: {
-    appId: process.env.APP_ID,
-    apiKey: process.env.WEB_API_KEY,
-    authDomain,
-    projectId: process.env.PROJECT_ID,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    storageBucket: process.env.STORAGE_BUCKET
-  },
+  // privateRuntimeConfig: {
+  //   appId: process.env.APP_ID,
+  //   apiKey: process.env.WEB_API_KEY,
+  //   authDomain,
+  //   projectId: process.env.PROJECT_ID,
+  //   messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  //   storageBucket: process.env.STORAGE_BUCKET
+  // },
 
   version: 2,
   builds: [
@@ -81,23 +81,23 @@ export default {
     '@nuxtjs/firebase'
   ],
 
-  firebase: {
-    config: {
-      apiKey: process.env.WEB_API_KEY,
-      authDomain: 'rsflips-pwntastickev.vercel.app',
-      projectId: 'grandexchange-a5b29',
-      storageBucket: 'grandexchange-a5b29.appspot.com',
-      messagingSenderId: '375225017421',
-      appId: '1:375225017421:web:691ab39bfc428281e52804'
-    },
-    services: {
-      auth: true,
-      firestore: true,
-      database: true,
-      messaging: true,
-      analytics: true
-    }
-  },
+  // firebase: {
+  //   config: {
+  //     apiKey: process.env.WEB_API_KEY,
+  //     authDomain: 'rsflips-pwntastickev.vercel.app',
+  //     projectId: 'grandexchange-a5b29',
+  //     storageBucket: 'grandexchange-a5b29.appspot.com',
+  //     messagingSenderId: '375225017421',
+  //     appId: '1:375225017421:web:691ab39bfc428281e52804'
+  //   },
+  //   services: {
+  //     auth: true,
+  //     firestore: true,
+  //     database: true,
+  //     messaging: true,
+  //     analytics: true
+  //   }
+  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
