@@ -83,7 +83,7 @@ export default {
 
   firebase: {
     config: {
-      apiKey: '',
+      apiKey: process.env.WEB_API_KEY,
       authDomain: 'rsflips-pwntastickev.vercel.app',
       projectId: 'grandexchange-a5b29',
       storageBucket: 'grandexchange-a5b29.appspot.com',
