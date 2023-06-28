@@ -1,70 +1,26 @@
 module.exports = {
-  root: true,
-  env: {
-    node: true
-  },
-  extends: ['plugin:vue/essential', '@vue/airbnb', 'prettier'],
-  parserOptions: {
-    parser: '@babel/eslint-parser'
-  },
-  plugins: ['eslint-plugin-prettier', 'simple-import-sort'],
+  extends: ["@ravnhq/eslint-config", "@ravnhq/eslint-config/react"],
   rules: {
-    'import/no-cycle': 0,
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'import/extensions': 0,
-    'no-shadow': [
-      'error',
-      { builtinGlobals: false, hoist: 'functions', allow: ['getters', 'state', 'params'] }
-    ],
-    'prettier/prettier': [
-      'warn',
-      {
-        arrowParens: 'avoid',
-        tabWidth: 2,
-        tabs: false,
-        semi: true,
-        singleQuote: true,
-        bracketSpacing: true,
-        printWidth: 80,
-        trailingComma: 'none',
-        htmlWhitespaceSensitivity: 'ignore'
-      }
-    ],
-    'comma-dangle': ['error', 'never'],
-    // 'arrow-parens': ['error', 'as-needed'],
-    'no-param-reassign': [
-      'error',
-      {
-        props: false
-      }
-    ],
-    'operator-linebreak': 0,
-    'no-return-assign': 0,
-    'consistent-return': 0,
-    'max-len': [
-      'error',
-      {
-        code: 90,
-        tabWidth: 2,
-        ignoreComments: true,
-        ignoreStrings: true,
-        ignoreTemplateLiterals: true,
-        ignoreUrls: true
-      }
-    ],
-    'implicit-arrow-linebreak': 0,
-    curly: ['error', 'multi-or-nest'],
-    'nonblock-statement-body-position': 0,
-    'function-paren-newline': 0,
-    'no-await-in-loop': 0,
-    // 'template-curly-spacing': ['error', 'never'],
-    'vue/attributes-order': [
-      'error',
-      {
-        alphabetical: true
-      }
-    ],
-    indent: 'off'
-  }
-};
+    "react/jsx-no-useless-fragment": ["error", {allowExpressions: true}],
+    "react/jsx-sort-props": "error",
+    "max-classes-per-file": "off",
+    camelcase: "off",
+    "no-underscore-dangle": "off",
+    "object-shorthand": "off",
+    "filenames/match-regex": "off",
+    "unicorn/consistent-destructuring": "off",
+    "unicorn/prefer-ternary": "off",
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/no-useless-undefined": "off",
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/prefer-native-coercion-functions": "off",
+    "vars-on-top": "off",
+    "sonarjs/prefer-immediate-return": "off",
+    "react/destructuring-assignment": "off",
+    "unicorn/no-array-reduce": "off",
+    "react/jsx-props-no-multi-spaces": "off",
+    "sonarjs/cognitive-complexity": "off",
+    "react/no-unescaped-entities": "off",
+    "unicorn/prefer-export-from": "off",
+  },
+}
