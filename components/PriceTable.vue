@@ -3,6 +3,7 @@
     <v-tooltip bottom class="bottom-right-tooltip" fixed right>
       <template v-slot:activator="{ on }">
         <v-btn
+          class="refresh-data--btn"
           color="primary"
           :disabled="loading"
           fab
@@ -269,4 +270,11 @@ export default {
   bottom: 16px;
   right: 16px;
 }
+
+  .refresh-data--btn {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    z-index: 20;
+  }
 </style>
