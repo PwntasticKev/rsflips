@@ -18,8 +18,6 @@ export default {
       null,
       { id: 26231, qty: 250 }
     );
-    const ursineChainmace = getItemSetProfit(27657, [22542, 27667]);
-    const webweaverBow = getItemSetProfit(27652, [22547, 27670]);
     const elysianSpiritShield = getItemSetProfit(12817, [12819, 12831]);
     const arcaneSpiritShield = getItemSetProfit(12825, [12827, 12831]);
     const spectralSpiritShield = getItemSetProfit(12821, [12823, 12831]);
@@ -33,6 +31,25 @@ export default {
     const masoriHelmF = getItemSetProfit(27226, [27226, 27269]);
     const masoriPlateF = getItemSetProfit(27229, [27229, 27269]);
     const masoriChapsF = getItemSetProfit(27232, [27232, 27269]);
+const serpentineHelm = getItemSetProfit(12929, [12927]);
+const blowpipe = getItemSetProfit(12924, [12922]);
+const saturatedHeart = getItemSetProfit(27641, [20724, 27616], null, {
+  id: 27616,
+  qty: 150000
+});
+    const torvaHelm = getItemSetProfit(26382, [26376, 26394], null, {
+      id: 26394,
+      qty: 1
+    });
+    const torvaPlate = getItemSetProfit(26384, [26378, 26394], null, {
+      id: 26394,
+      qty: 2
+    });
+
+    const torvaLegs = getItemSetProfit(26386, [26380, 26394], null, {
+      id: 26394,
+      qty: 2
+    });
 
     const mergedResults = [
       ...venator,
@@ -48,8 +65,6 @@ export default {
       ...abyssalDagger,
       ...toxicStaff,
       ...zaryteCrossbow,
-      ...ursineChainmace,
-      ...webweaverBow,
       ...elysianSpiritShield,
       ...arcaneSpiritShield,
       ...spectralSpiritShield,
@@ -62,7 +77,14 @@ export default {
       ...masoriSetF,
       ...masoriHelmF,
       ...masoriPlateF,
-      ...masoriChapsF
+      ...masoriChapsF,
+        ...serpentineHelm,
+      ...blowpipe,
+      ...saturatedHeart,
+      ...torvaHelm,
+      ...torvaPlate,
+      ...torvaLegs
+
     ];
 
     return mergedResults;
