@@ -13,8 +13,8 @@ const getters = {
         const profit =
           priceById.high && priceById.low
             ? new Intl.NumberFormat().format(
-                Math.floor(priceById.high * 0.99 - priceById.low)
-              )
+              Math.floor(priceById.high * 0.99 - priceById.low)
+            )
             : 'N/A';
         const low = priceById.low
           ? new Intl.NumberFormat().format(parseInt(priceById.low, 10))
@@ -53,22 +53,22 @@ const getters = {
 
   getItemSetProfit:
     (state, getters) =>
-    // qty needs to be rethunk. mayeb an object?
-    // example {id: id, qty: 250}
-    (itemSet, itemsToCreateSet, conversionCost = 0, qty = {}) => {
-      const totalPrice = getters.totalPriceConverted(
-        itemSet,
-        itemsToCreateSet,
-        conversionCost,
-        qty
-      );
-      // item to be converted to.
-      const originalItem = getters.allItems.find(item => item.id === itemSet);
+      // qty needs to be rethunk. mayeb an object?
+      // example {id: id, qty: 250}
+      (itemSet, itemsToCreateSet, conversionCost = 0, qty = {}) => {
+        const totalPrice = getters.totalPriceConverted(
+          itemSet,
+          itemsToCreateSet,
+          conversionCost,
+          qty
+        );
+        // item to be converted to.
+        const originalItem = getters.allItems.find(item => item.id === itemSet);
 
-      const modifiedItem = getters.getModifiedItem(originalItem, totalPrice);
+        const modifiedItem = getters.getModifiedItem(originalItem, totalPrice);
 
-      return [modifiedItem, ...getters.getItemsById(itemsToCreateSet)];
-    },
+        return [modifiedItem, ...getters.getItemsById(itemsToCreateSet)];
+      },
 
   getModifiedItem: () => (item, totalPrice) => {
     const highPriceWithoutCommas = item.high
@@ -92,29 +92,29 @@ const getters = {
 
   totalPriceConverted:
     state =>
-    (itemSet, itemIds, conversionCost, qty = null) => {
-      let total = 0;
+      (itemSet, itemIds, conversionCost, qty = null) => {
+        let total = 0;
 
-      // Calculate qtyItemNoCommas
-      const qtyItemLow =
-        qty && state.pricesById[qty.id]
-          ? String(state.pricesById[qty.id].low).replace(/,/g, '')
-          : 0;
-      const qtyItemNoCommas = qtyItemLow * (qty && qty.qty ? qty.qty - 1 : 0);
+        // Calculate qtyItemNoCommas
+        const qtyItemLow =
+          qty && state.pricesById[qty.id]
+            ? String(state.pricesById[qty.id].low).replace(/,/g, '')
+            : 0;
+        const qtyItemNoCommas = qtyItemLow * (qty && qty.qty ? qty.qty - 1 : 0);
 
-      itemIds.forEach(itemId => {
-        const lowPriceNoCommas = String(state.pricesById[itemId]?.low).replace(
-          /,/g,
-          ''
-        );
-        // find the item's low price.
-        const price = lowPriceNoCommas ? parseInt(lowPriceNoCommas, 10) : 0;
+        itemIds.forEach(itemId => {
+          const lowPriceNoCommas = String(state.pricesById[itemId]?.low).replace(
+            /,/g,
+            ''
+          );
+          // find the item's low price.
+          const price = lowPriceNoCommas ? parseInt(lowPriceNoCommas, 10) : 0;
 
-        total += price;
-      });
+          total += price;
+        });
 
-      return total + qtyItemNoCommas + conversionCost;
-    }
+        return total + qtyItemNoCommas + conversionCost;
+      }
 };
 
 const mutations = {
@@ -127,10 +127,10 @@ const mutations = {
 };
 
 const actions = {
-  getPricingData: async ({ commit }) => {
+  getPricingData: async ({commit}) => {
     try {
       // axios.get('https://prices.runescape.wiki/api/v1/osrs/mapping'),
-      const { data } = await axios.get(
+      const {data} = await axios.get(
         'https://prices.runescape.wiki/api/v1/osrs/latest'
       );
 
@@ -139,18 +139,17 @@ const actions = {
       console.error('Error fetching Pricing data:', error);
     }
   },
-  async getMappingData({ state, commit }) {
+  async getMappingData({state, commit}) {
     if (state.mapItems.length > 0) return;
 
     if (process.client) {
       const storedData = localStorage.getItem('pricingData');
       if (storedData) {
-        console.log('theres data stored');
         commit('SET_ITEMS', JSON.parse(storedData.mapItems));
       }
     } else {
       try {
-        const { data } = await axios.get(
+        const {data} = await axios.get(
           'https://prices.runescape.wiki/api/v1/osrs/mapping'
         );
 
